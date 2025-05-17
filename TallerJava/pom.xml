@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.tallerJava</groupId>
+    <groupId>org.tallerjava</groupId>
     <artifactId>TallerJava</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>war</packaging>
@@ -34,7 +34,17 @@
             <version>${jakartaee-api.version}</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.security.enterprise</groupId>
+            <artifactId>jakarta.security.enterprise-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.jboss.weld.se</groupId>
             <artifactId>weld-se-shaded</artifactId>
@@ -104,6 +114,30 @@
             <version>1.13.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.3.3</version> <!-- Asegúrate de usar una versión reciente -->
+        </dependency>
+
+        <dependency>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>8.10.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.19.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.transaction</groupId>
+            <artifactId>jakarta.transaction-api</artifactId>
+            <version>2.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -135,7 +169,7 @@
                         <users>
                             <user>
                                 <username>root</username>
-                                <password>rootpass1234</password>
+                                <password>1234</password>
                                 <application-user>false</application-user>
                             </user>
                         </users>

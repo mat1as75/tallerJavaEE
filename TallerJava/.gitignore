@@ -1,2 +1,7 @@
 target/
 .mvn/wrapper/maven-wrapper.jar
+
+src/main/resources/
+config.cli
+pom.xml
+webapp

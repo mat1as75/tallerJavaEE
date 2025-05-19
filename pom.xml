@@ -165,7 +165,6 @@
                     <version>${wildfly.version}</version>
                     <server-config>standalone-full.xml</server-config>
                     <add-user>
-
                         <users>
                             <user>
                                 <username>root</username>
@@ -174,7 +173,6 @@
                             </user>
                         </users>
                     </add-user>
-
                     <scripts>
                         <!-- ver archivo config.cli que está en ./ -->
                         <script>config.cli</script>

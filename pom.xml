@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.tallerJava</groupId>
+    <groupId>org.tallerjava</groupId>
     <artifactId>TallerJava</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>war</packaging>
@@ -164,17 +164,15 @@
                 <configuration>
                     <version>${wildfly.version}</version>
                     <server-config>standalone-full.xml</server-config>
-<!--                    <add-user>-->
-
-<!--                        <users>-->
-<!--                            <user>-->
-<!--                                <username>root</username>-->
-<!--                                <password>1234</password>-->
-<!--                                <application-user>false</application-user>-->
-<!--                            </user>-->
-<!--                        </users>-->
-<!--                    </add-user>-->
-
+                    <add-user>
+                        <users>
+                            <user>
+                                <username>root</username>
+                                <password>1234</password>
+                                <application-user>false</application-user>
+                            </user>
+                        </users>
+                    </add-user>
                     <scripts>
                         <!-- ver archivo config.cli que está en ./ -->
                         <script>config.cli</script>

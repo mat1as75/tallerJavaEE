@@ -13,6 +13,10 @@ import lombok.Setter;
 public class Pos {
     @Id
     private int id;
+
+    //private int importAmount;
+    //private datosTarjeta
+
     private boolean status;
 
     public Pos() {}

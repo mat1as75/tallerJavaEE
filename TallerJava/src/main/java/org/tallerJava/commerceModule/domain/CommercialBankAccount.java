@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "commerce_CommercialBankAccount")
-public class CommercialBankAccount {
+public class  CommercialBankAccount {
 
     @Id
     private int accountNumber;

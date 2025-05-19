@@ -8,9 +8,9 @@ import java.util.List;
 public interface CommerceRepository {
     public Commerce findByRut(int rut);
     public List<Commerce> findAll();
-    public Commerce create(Commerce commerce);
-    public Commerce update(Commerce commerce);
-    public Commerce updatePassword(int rut, String newPass);
+    public boolean create(Commerce commerce);
+    public boolean update(Commerce commerce);
+    public boolean updatePassword(int rut, String newPass);
     public void delete(int rut);
 
 

@@ -34,7 +34,12 @@ public class CommerceAPI {
         log.infof("Finding Commerce with rut: %d", rut);
 
         Commerce commerce = commerceService.getByRut(rut);
-        return Response.ok(commerce).build();
+        if (commerce != null) {
+            return Response.status(Response.Status.OK).entity(commerce).build();
+        } else {
+            log.error("No Commerce found with rut: " + rut);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @GET
@@ -63,9 +68,13 @@ public class CommerceAPI {
         log.infof("Updating Commerce: %s", commerceDTO);
 
         Commerce commerce = commerceDTO.buildCommerce();
-        commerceService.update(commerce);
 
-        return Response.ok(commerce).build();
+        if (commerceService.update(commerce)) {
+            return Response.status(Response.Status.OK).entity(commerce).build();
+        } else {
+            log.error("No Commerce found with rut: " + commerceDTO.getRut());
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @PATCH

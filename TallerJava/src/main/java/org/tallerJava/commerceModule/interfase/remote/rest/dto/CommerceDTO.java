@@ -10,6 +10,7 @@ import org.tallerJava.commerceModule.domain.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -20,19 +21,19 @@ public class CommerceDTO {
     private String email;
     private String password;
     private CommercialBankAccountDTO account;
-    private List<PosDTO> listPos = new ArrayList<>();
+    private Set<PosDTO> listPos;
     @JsonProperty("listComplaints")
-    private List<ComplaintDTO> listComplaint = new ArrayList<>();
+    private Set<ComplaintDTO> listComplaint;
 
     /* DTO has the responsibility of building its corresponding business object */
     public Commerce buildCommerce() {
-        List<Pos> listPos = this.listPos.stream()
+        Set<Pos> listPos = this.listPos.stream()
                 .map(PosDTO::buildPos)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        List<Complaint> listComplaint = this.listComplaint.stream()
+        Set<Complaint> listComplaint = this.listComplaint.stream()
                 .map(ComplaintDTO::buildComplaint)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         return new Commerce(rut, email, password, account.buildCommercialBankAccount(), listPos, listComplaint);
     }

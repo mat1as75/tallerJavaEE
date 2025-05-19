@@ -2,15 +2,11 @@ package org.tallerJava.commerceModule.application.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 import org.tallerJava.commerceModule.application.CommerceService;
 import org.tallerJava.commerceModule.domain.Commerce;
-import org.tallerJava.commerceModule.domain.CommercialBankAccount;
-import org.tallerJava.commerceModule.domain.Pos;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,17 +18,17 @@ public class CommerceServiceImpl implements CommerceService {
     private CommerceRepository commerceRepository;
 
     @Override
-    public Commerce create(Commerce commerce) {
+    public boolean create(Commerce commerce) {
         return commerceRepository.create(commerce);
     }
 
     @Override
-    public Commerce update(Commerce commerce) {
+    public boolean update(Commerce commerce) {
         return commerceRepository.update(commerce);
     }
 
     @Override
-    public Commerce changePassword(int rut, String newPass) {
+    public boolean changePassword(int rut, String newPass) {
         return commerceRepository.updatePassword(rut, newPass);
     }
 

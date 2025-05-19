@@ -26,7 +26,7 @@ public class PaymentDataDTO {
 
     public static Card buildCard(CardDataDTO dto_card){
         Card card = new Card();
-        card.setNro(dto_card.getNumber());
+        card.setNumber(dto_card.getNumber());
         card.setBrand(dto_card.getBrand());
         Date date = null;
         try {

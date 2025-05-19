@@ -1,2 +1,2 @@
 # tallerJavaEE
-Implementación Pasarela de pagos en Java EE
+Implementación Pasarela de pagos en Java EE...

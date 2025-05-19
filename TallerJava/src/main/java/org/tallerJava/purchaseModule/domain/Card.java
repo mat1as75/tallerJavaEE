@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 public class Card {
     @Id
     private long number;
-    @Getter
-    @Setter
     private String brand;
-    @Getter
-    @Setter
     private String expirationDate;
 
     public Card(long number, String brand, String expirationDate) {
@@ -23,13 +21,4 @@ public class Card {
 
     public Card() {
     }
-
-    public long getNro() {
-        return number;
-    }
-
-    public void setNro(long number) {
-        this.number = number;
-    }
-
 }

@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @ApplicationScoped
@@ -32,65 +31,41 @@ public class PurchaseServiceImpl implements PurchaseService {
     private PosRepository PosRepository;
 
     @Override
+    @Transactional
     public void processPayment(Purchase purchase, Card card, int rut, int posId) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
         PurchasePos pos = PosRepository.findById(posId);
         if (!pos.isStatus()) {
             throw new IllegalStateException("El POS está inactivo o no disponible");
         }
+        //Falta agregar validación de la tarjeta frente a Medios de pago
         purchase.setPos(pos);
-        purchase.setCard(card);
         purchaseRepository.create(purchase);
         commerce.addPurchase(purchase);
-        commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate(), new Date());
-    }
-
-    @Override
-    @Transactional
-    public List<Purchase> getPurchasesOfTheDay(int rut) {
-        // Al estar dentro de @Transactional, no hay problemas de lazy loading
-        PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
-        
-        // Filtramos las compras del día actual
-        LocalDate today = LocalDate.now();
-        return commerce.getPurchases().stream()
-                .filter(p -> {
-                    LocalDate purchaseDate = p.getDate().toInstant()
-                            .atZone(ZoneId.systemDefault()).toLocalDate();
-                    return purchaseDate.equals(today);
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional
-    public double getTotalSalesAmount(int rut) {
-        // Al estar dentro de @Transactional, no hay problemas de lazy loading
-        PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
-        // La colección se cargará automáticamente al acceder a ella dentro de la transacción
-        return commerce.getTotalSalesAmount();
+        commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate());
     }
 
     @Override
     @Transactional
     public SalesSummaryDTO getSalesSummaryOfTheDay(int rut) {
-        // Al estar dentro de @Transactional, no hay problemas de lazy loading
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
-        
-        // Filtramos las compras del día actual
+
         LocalDate today = LocalDate.now();
-        List<Purchase> comprasHoy = commerce.getPurchases().stream()
-                .filter(p -> {
-                    LocalDate purchaseDate = p.getDate().toInstant()
-                            .atZone(ZoneId.systemDefault()).toLocalDate();
-                    return purchaseDate.equals(today);
-                })
-                .collect(Collectors.toList());
-        
-        // Calculamos el total o utilizamos el que ya tiene la entidad
-        double totalSalesAmount = commerce.getTotalSalesAmount();
-        
-        // Construimos el DTO con los datos obtenidos
-        return SalesSummaryDTO.from(comprasHoy, totalSalesAmount);
+        ZoneId zone = ZoneId.systemDefault();
+        Date startDay = Date.from(today.atStartOfDay(zone).toInstant());
+        Date endDay = Date.from(today.plusDays(1).atStartOfDay(zone).toInstant()); // Paso el rango del día para optimizar consulta
+
+        List<Purchase> todayPurchases = purchaseRepository.findPurchasesByCommerceRutAndDateBetween(commerce, startDay, endDay); // paso commerce para optimizar consulta usando cache hibernate
+
+        return SalesSummaryDTO.from(todayPurchases);
     }
+
+    @Override
+    @Transactional
+    public double getTotalSalesAmount(int rut) {
+        PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
+        commerce.resetTotalAmountIfDifferentDay();
+        return commerce.getTotalSalesAmount();
+    }
+
 }

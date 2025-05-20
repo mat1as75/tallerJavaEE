@@ -22,18 +22,9 @@ public class PurchaseCommerce {
     @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL)
     private List<Purchase> purchases = new ArrayList<>();
 
+    private Date lastPurchase;
 
-    @Transient
     private double totalSalesAmount = 0d;
-
-    public void addPurchaseAmount(double amount,Date purchaseDate, Date dateToday) {
-        if (!isSameDay(purchaseDate, dateToday)) {
-            this.totalSalesAmount = 0d;
-        }
-        if (amount > 0) {
-            this.totalSalesAmount += amount;
-        }
-    }
 
     public PurchaseCommerce(int rut) {
         this.rut = rut;
@@ -42,9 +33,24 @@ public class PurchaseCommerce {
     public PurchaseCommerce() {
     }
 
+    public void addPurchaseAmount(double amount,Date purchaseDate) {
+        if (isDifferentDay(purchaseDate, lastPurchase)) {
+            this.totalSalesAmount = 0d;
+        }
+        if (amount > 0) {
+            this.totalSalesAmount += amount;
+        }
+    }
+    public void resetTotalAmountIfDifferentDay(){
+        if (isDifferentDay(lastPurchase, new Date())) {
+            this.totalSalesAmount = 0d;
+        }
+    }
+
     public void addPurchase(Purchase purchase) {
         purchases.add(purchase);
         purchase.setCommerce(this);
+        this.lastPurchase = purchase.getDate();
     }
     
     public void removePurchase(Purchase purchase) {
@@ -52,9 +58,12 @@ public class PurchaseCommerce {
         purchase.setCommerce(null);
     }
 
-    private boolean isSameDay(Date date1, Date date2) {
+    private boolean isDifferentDay(Date date1, Date date2) {
+        if (date1 == null || date2 == null) {
+            return true;
+        }
         LocalDate localDate1 = date1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate localDate2 = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return localDate1.equals(localDate2);
+        return !localDate1.equals(localDate2);
     }
 }

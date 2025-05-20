@@ -6,9 +6,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
+
 public class Card {
-    @Id
     private long number;
     private String brand;
     private String expirationDate;

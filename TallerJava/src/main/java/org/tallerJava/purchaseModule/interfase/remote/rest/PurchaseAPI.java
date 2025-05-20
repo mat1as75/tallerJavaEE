@@ -49,7 +49,6 @@ public class PurchaseAPI {
     public Response getDailySalesSummary(@PathParam("rut") int rut) {
         log.infof("Obteniendo resumen de ventas diarias para comercio con RUT: {}", rut);
         try {
-            // Usamos el nuevo método que construye directamente el DTO en el servicio
             SalesSummaryDTO dtoResumen = purchaseService.getSalesSummaryOfTheDay(rut);
             return Response.ok(dtoResumen).build();
         } catch(Exception e) {
@@ -59,17 +58,19 @@ public class PurchaseAPI {
                     .build();
         }
     }
+
+
             
     @GET
     @Path("/totalVentas/{rut}")
     public Response getTotalSales(@PathParam("rut") int rut) {
         log.infof("Obteniendo el monto total de ventas para comercio con RUT: {}", rut);
         try {
-            double montoTotal = purchaseService.getTotalSalesAmount(rut);
+            double totalAmount = purchaseService.getTotalSalesAmount(rut);
 
             JsonObject jsonResponse = Json.createObjectBuilder()
                     .add("rut", rut)
-                    .add("montoTotal", montoTotal)
+                    .add("montoTotal", totalAmount)
                     .build();
 
             return Response.ok(jsonResponse).build();

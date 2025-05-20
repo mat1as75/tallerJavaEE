@@ -1,24 +1,19 @@
--- Cards
-INSERT INTO Card (number, brand, expirationDate) VALUES
-  (100001, 'VISA', '05/2026'),
-  (100002, 'MASTERCARD', '12/2027'),
-  (100003, 'AMEX', '09/2025');
-
 -- PurchaseCommerce
-INSERT INTO purchase_commerce (rut) VALUES
-  ( 20123456),
-  ( 20456789);
-
--- Purchases
--- Se asume que los números de tarjeta y comercios insertados arriba existen.
-INSERT INTO Purchase (id, amount, description, card_number, commerce_rut) VALUES
-  (1, 1500.00, 'Compra realizada desde POS 101', 100001,20123456 ),
-  (2, 3000.50, 'Compra online desde sitio web', 100002, 20123456),
-  (3, 875.75, 'Compra presencial', 100003, 20456789);
+INSERT INTO purchase_commerce (rut, totalSalesAmount)
+VALUES (20123456, 0),
+       (20456789, 0);
 
 -- PurchasePos (POS = terminales de punto de venta)
-INSERT INTO purchase_pos (id,status) VALUES
-   (101,true),
-   (102,true),
-   (103,false),
-   (104,true);
+INSERT INTO purchase_pos (id, status)
+VALUES (101, true),
+       (102, true),
+       (103, false),
+       (104, true);
+-- Purchases
+-- Se asume que los comercios insertados arriba existen.
+INSERT INTO Purchase (id, amount, commerce_rut, pos_id, date, description)
+VALUES (1, 1500.00, 20123456, 101, '2025-05-20 10:33:55.683000', 'Compra realizada desde POS 101'),
+       (2, 3000.50, 20123456, 102, '2025-05-21 12:11:20.123000', 'Compra online desde POS 102'),
+       (3, 8275.75, 20456789, 101, '2025-05-20 14:45:33.456000', 'Compra presencial desde POS 101');
+
+

@@ -15,11 +15,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SalesSummaryDTO {
     private String date;
-    private double totalAmount;
     private int transactionCount;
     private List<SingleSaleDTO> sales;
 
-    public static SalesSummaryDTO from(List<Purchase> purchases, double totalAmount) {
+    public static SalesSummaryDTO from(List<Purchase> purchases) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dayDate = dateFormat.format(new Date());
@@ -34,7 +33,7 @@ public class SalesSummaryDTO {
 
         int transactionCount = salesList.size();
 
-        return new SalesSummaryDTO(dayDate, totalAmount, transactionCount, salesList);
+        return new SalesSummaryDTO(dayDate, transactionCount, salesList);
     }
 
 }

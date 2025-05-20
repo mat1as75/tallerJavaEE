@@ -11,7 +11,6 @@ public class CardDataDTO {
     private String date;
 
     public CardDataDTO() {
-        // Constructor por defecto necesario para la deserialización JSON
     }
 
 }

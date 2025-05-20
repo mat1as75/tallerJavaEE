@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SingleSaleDTO {
-    private long id;           // id de la venta (Purchase)
-    private double amount;     // Monto de la venta
-    private String date;       // Fecha y hora en string (puedes usar formato ISO)
-    private String description;// Descripción de la venta
+    private long id;
+    private double amount;
+    private String date;
+    private String description;
 }

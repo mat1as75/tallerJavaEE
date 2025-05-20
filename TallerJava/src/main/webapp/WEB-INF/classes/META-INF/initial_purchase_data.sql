@@ -10,7 +10,7 @@ VALUES (101, true),
        (103, false),
        (104, true);
 -- Purchases
--- Se asume que los comercios insertados arriba existen.
+-- Se asume que los comercios insertados arriba existen. !!IMPORTANTE el total amount de este test no se ven reflejados en el contador dailyamount del modelo purchase
 INSERT INTO Purchase (id, amount, commerce_rut, pos_id, date, description)
 VALUES (1, 1500.00, 20123456, 101, '2025-05-20 10:33:55.683000', 'Compra realizada desde POS 101'),
        (2, 3000.50, 20123456, 102, '2025-05-21 12:11:20.123000', 'Compra online desde POS 102'),

@@ -11,7 +11,10 @@ public interface CommerceRepository {
     public boolean create(Commerce commerce);
     public boolean update(Commerce commerce);
     public boolean updatePassword(int rut, String newPass);
-    public void delete(int rut);
+    public boolean delete(int rut);
 
+    public boolean createComplaint(int rut_commerce, String message);
+    public boolean createPos(int rut_commerce, Pos pos);
+    public boolean changePosStatus(int rut_commerce, Pos pos, boolean status);
 
 }

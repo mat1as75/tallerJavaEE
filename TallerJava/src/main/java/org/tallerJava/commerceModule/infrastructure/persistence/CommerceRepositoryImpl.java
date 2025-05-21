@@ -107,7 +107,68 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public void delete(int rut) {
-        em.remove(this.findByRut(rut));
+    public boolean delete(int rut) {
+        Commerce commerce = this.findByRut(rut);
+        if (commerce == null) return false;
+
+        try {
+            em.remove(this.findByRut(rut));
+            return true;
+        } catch (PersistenceException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createComplaint(int rut_commerce, String message) {
+        Commerce commerce = this.findByRut(rut_commerce);
+        if (commerce == null) return false;
+        Complaint complaint = new Complaint(message);
+
+        try {
+            em.persist(complaint);
+            commerce.getListComplaints().add(complaint);
+            em.merge(commerce);
+            return true;
+        } catch (PersistenceException e) {
+            System.out.println("Fallo al crear el reclamo en CommerceRepositoryImpl.createComplaint()");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createPos(int rut_commerce, Pos pos) {
+        Commerce commerce = this.findByRut(rut_commerce);
+        if (commerce == null) return false;
+
+        try {
+            Pos newPos = new Pos(pos.getId(), pos.isStatus());
+            commerce.getListPos().add(newPos);
+            em.merge(commerce);
+            return true;
+        } catch (PersistenceException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean changePosStatus(int rut_commerce, Pos pos, boolean newStatus) {
+        Commerce commerce = this.findByRut(rut_commerce);
+        if (commerce == null) return false;
+
+        try {
+            Pos updatePos = commerce.getListPos().stream()
+                    .filter(p -> p.getId() == pos.getId())
+                    .findFirst()
+                    .orElse(null);
+
+            if (updatePos == null) return false;
+
+            updatePos.setStatus(newStatus);
+            em.merge(commerce);
+            return true;
+        } catch (PersistenceException e) {
+            return false;
+        }
     }
 }

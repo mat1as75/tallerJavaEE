@@ -14,6 +14,6 @@ public class ComplaintDTO {
 
     /* DTO has the responsibility of building its corresponding business object */
     public Complaint buildComplaint() {
-        return new Complaint(id, message);
+        return new Complaint(message);
     }
 }

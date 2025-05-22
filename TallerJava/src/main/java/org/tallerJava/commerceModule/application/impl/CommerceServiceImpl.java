@@ -43,50 +43,50 @@ public class CommerceServiceImpl implements CommerceService {
     }
 
     @Override
-    public boolean updatePassword(int rut, String newPass) {
+    public boolean updatePassword(long rut, String newPass) {
         notifyUpdatePasswordCommerce(rut, newPass);
         return commerceRepository.updatePassword(rut, newPass);
     }
 
-    private void notifyUpdatePasswordCommerce(int rut_commerce, String newPass) {
+    private void notifyUpdatePasswordCommerce(long rut_commerce, String newPass) {
         publisherEventCommerce.publishUpdatePasswordCommerce(rut_commerce, newPass);
     }
 
     @Override
-    public boolean delete(int rut) { return commerceRepository.delete(rut); }
+    public boolean delete(long rut) { return commerceRepository.delete(rut); }
 
     @Override
-    public boolean createComplaint(int rut_commerce, String message) {
+    public boolean createComplaint(long rut_commerce, String message) {
         notifyMakeComplaint(rut_commerce, message);
         return commerceRepository.createComplaint(rut_commerce, message);
     }
 
-    private void notifyMakeComplaint(int rut_commerce, String message) {
+    private void notifyMakeComplaint(long rut_commerce, String message) {
         publisherEventCommerce.makeCommerceComplaint(rut_commerce, message);
     }
 
     @Override
-    public boolean createPos(int rut_commerce, Pos pos) {
+    public boolean createPos(long rut_commerce, Pos pos) {
         notifyNewPos(rut_commerce, pos);
         return commerceRepository.createPos(rut_commerce, pos);
     }
 
-    private void notifyNewPos(int rut_commerce, Pos pos) {
+    private void notifyNewPos(long rut_commerce, Pos pos) {
         publisherEventCommerce.publishNewPos(rut_commerce, pos.getId(), pos.isStatus());
     }
 
     @Override
-    public boolean changePosStatus(int rut_commerce, Pos pos, boolean newStatus) {
+    public boolean changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
         notifyChangePosStatus(rut_commerce, pos.getId(), newStatus);
         return commerceRepository.changePosStatus(rut_commerce, pos, newStatus);
     }
 
-    private void notifyChangePosStatus(int rut_commerce, int id_pos, boolean newStatus) {
+    private void notifyChangePosStatus(long rut_commerce, int id_pos, boolean newStatus) {
         publisherEventCommerce.publishChangePosStatus(rut_commerce, id_pos, newStatus);
     }
 
     @Override
-    public Commerce getByRut(int rut) {
+    public Commerce getByRut(long rut) {
         return commerceRepository.findByRut(rut);
     }
 

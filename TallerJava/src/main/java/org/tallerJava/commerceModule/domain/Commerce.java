@@ -17,7 +17,7 @@ public class Commerce {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int rut;
+    private long rut;
     private String email;
     private String password;
     @OneToOne(cascade = CascadeType.ALL)
@@ -37,7 +37,7 @@ public class Commerce {
 
     public Commerce() {}
 
-    public Commerce(int rut, String email, String password, CommercialBankAccount account, Set<Pos> listPos, Set<Complaint> listComplaints){
+    public Commerce(long rut, String email, String password, CommercialBankAccount account, Set<Pos> listPos, Set<Complaint> listComplaints){
         this.rut = rut;
         this.email = email;
         this.password = password;

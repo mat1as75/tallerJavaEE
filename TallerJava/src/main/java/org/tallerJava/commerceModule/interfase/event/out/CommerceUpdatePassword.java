@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CommerceUpdatePassword {
-    private int rut;
+    private long rut;
     private String newPassword;
 }

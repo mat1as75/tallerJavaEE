@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommerceDTO {
-    private int rut;
+    private long rut;
     private String email;
     private String password;
     @JsonProperty("account")

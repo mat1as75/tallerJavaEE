@@ -62,26 +62,26 @@ public class PublisherEventCommerce {
         updateCommerceDataEvent.fire(event);
     }
 
-    public void publishUpdatePasswordCommerce(int rut_commerce, String newPass) {
+    public void publishUpdatePasswordCommerce(long rut_commerce, String newPass) {
         CommerceUpdatePassword event = new CommerceUpdatePassword(rut_commerce, newPass);
 
         updatePasswordEvent.fire(event);
     }
 
-    public void makeCommerceComplaint(int rut_commerce, String message) {
+    public void makeCommerceComplaint(long rut_commerce, String message) {
         CommerceMakeClaim event = new CommerceMakeClaim(rut_commerce, message);
 
         makeComplaintEvent.fire(event);
     }
 
-    public void publishNewPos(int rut_commerce, int id_pos, boolean status_pos) {
+    public void publishNewPos(long rut_commerce, int id_pos, boolean status_pos) {
         CommercePos newPos = new CommercePos(id_pos, status_pos);
         CommerceNewPos event = new CommerceNewPos(rut_commerce, newPos.getId(), newPos.isStatus());
 
         newPosEvent.fire(event);
     }
 
-    public void publishChangePosStatus(int rut_commerce, int id_pos, boolean status_pos) {
+    public void publishChangePosStatus(long rut_commerce, int id_pos, boolean status_pos) {
         CommercePos updatedPos = new CommercePos(id_pos, status_pos);
         CommerceNewPos event = new CommerceNewPos(rut_commerce, updatedPos.getId(), updatedPos.isStatus());
 

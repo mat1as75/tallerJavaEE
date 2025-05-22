@@ -27,7 +27,7 @@ public class CommerceAPI {
     @GET
     @Path("/{rut}")
     @Transactional
-    public Response findByRut(@PathParam("rut") int rut) {
+    public Response findByRut(@PathParam("rut") long rut) {
         log.infof("Obteniendo Comercio con Rut: %d", rut);
 
         Commerce commerce = commerceService.getByRut(rut);

@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 public class Complaint {
     int id;
-    int rut_commerce;
+    long rut_commerce;
     String message;
 
     public Complaint() {}
-    public Complaint(int rut_commerce, String message) {
+    public Complaint(long rut_commerce, String message) {
         this.rut_commerce = rut_commerce;
         this.message = message;
     }

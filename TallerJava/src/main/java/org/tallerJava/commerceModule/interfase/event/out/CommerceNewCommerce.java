@@ -10,7 +10,7 @@ public class CommerceNewCommerce {
     //no uso DTOs para mantener bajo el acoplamiento
     //de lo contrario el modulo de Monitoreo que es quien va a escuchar este evento
     //va a tener dependencias transitivas con los DTOs
-    private int rut;
+    private long rut;
     private String email;
     private String password;
     private int accountNumber;

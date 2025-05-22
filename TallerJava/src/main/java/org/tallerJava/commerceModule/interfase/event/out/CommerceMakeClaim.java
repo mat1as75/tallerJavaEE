@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CommerceMakeClaim {
-    private int rut_commerce;
+    private long rut_commerce;
     private String message;
 }

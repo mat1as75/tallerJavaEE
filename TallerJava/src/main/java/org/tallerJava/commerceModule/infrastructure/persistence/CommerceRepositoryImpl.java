@@ -20,7 +20,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     @Transactional
-    public Commerce findByRut(int rut) {
+    public Commerce findByRut(long rut) {
         try {
             String query = "SELECT c FROM commerce_Commerce c " +
                         "LEFT JOIN FETCH c.listComplaints " +
@@ -75,7 +75,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public boolean updatePassword(int rut, String newPass) {
+    public boolean updatePassword(long rut, String newPass) {
         Commerce commerceToUpdatePass = this.findByRut(rut);
         if (commerceToUpdatePass == null) return false;
 
@@ -94,7 +94,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public boolean delete(int rut) {
+    public boolean delete(long rut) {
         Commerce commerce = this.findByRut(rut);
         if (commerce == null) return false;
 
@@ -107,7 +107,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public boolean createComplaint(int rut_commerce, String message) {
+    public boolean createComplaint(long rut_commerce, String message) {
         Commerce commerce = this.findByRut(rut_commerce);
         if (commerce == null) return false;
         Complaint complaint = new Complaint(message);
@@ -124,7 +124,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public boolean createPos(int rut_commerce, Pos pos) {
+    public boolean createPos(long rut_commerce, Pos pos) {
         Commerce commerce = this.findByRut(rut_commerce);
         if (commerce == null) return false;
 
@@ -139,7 +139,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public boolean changePosStatus(int rut_commerce, Pos pos, boolean newStatus) {
+    public boolean changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
         Commerce commerce = this.findByRut(rut_commerce);
         if (commerce == null) return false;
 

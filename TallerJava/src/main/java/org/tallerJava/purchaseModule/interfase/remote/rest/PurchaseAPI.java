@@ -2,6 +2,8 @@ package org.tallerJava.purchaseModule.interfase.remote.rest;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -11,6 +13,9 @@ import org.tallerJava.purchaseModule.application.PurchaseService;
 import org.tallerJava.purchaseModule.domain.Card;
 import org.tallerJava.purchaseModule.domain.Purchase;
 import org.tallerJava.purchaseModule.interfase.remote.rest.dto.PaymentDataDTO;
+import org.tallerJava.purchaseModule.interfase.remote.rest.dto.SalesSummaryDTO;
+
+import java.util.List;
 
 @ApplicationScoped
 @Path("/purchase")
@@ -41,11 +46,11 @@ public class PurchaseAPI {
 
     @GET
     @Path("/resumenVentasDiarias/{rut}")
-    public Response getDailySalesSummary(@PathParam("rut") String rut) {
+    public Response getDailySalesSummary(@PathParam("rut") int rut) {
         log.infof("Obteniendo resumen de ventas diarias para comercio con RUT: {}", rut);
         try {
-            //DailySalesSummaryDTO resumenVentas = purchaseService.getDailySalesSummary(rut);
-            return Response.ok().build();
+            SalesSummaryDTO dtoResumen = purchaseService.getSalesSummaryOfTheDay(rut);
+            return Response.ok(dtoResumen).build();
         } catch(Exception e) {
             log.error("Error al obtener el resumen de ventas diarias", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -53,28 +58,44 @@ public class PurchaseAPI {
                     .build();
         }
     }
-//
-//    @GET
-//    @Path("/summary")
-//    public Response getSalesSummaryByPeriod(
-//            @QueryParam("commerceId") String commerceId,
-//            @QueryParam("startDate") String startDate,
-//            @QueryParam("endDate") String endDate) {
-//
-//        log.infof("Getting sales summary for commerce: {} from {} to {}",
-//                commerceId, startDate, endDate);
-//
-//        return Response.ok()
-//                .entity("{\"totalSales\":15000.00,\"transactionCount\":250}")
-//                .build();
-//    }
-//
-//    @GET
-//    @Path("/current-sales/{commerceId}")
-//    public Response getCurrentSales(@PathParam("commerceId") String commerceId) {
-//        log.infof("Getting current sales for commerce: {}", commerceId);
-//        return Response.ok()
-//                .entity("{\"amount\":2500.00,\"lastUpdate\":\"2024-02-14T15:30:00Z\"}")
-//                .build();
-//    }
+
+    @GET
+    @Path("/resumenVentasPorPeriodo/{rut}")
+    public Response getSalesSummaryByPeriod(
+            @PathParam("rut") int rut,
+            @QueryParam("fechaInicio") String fechaInicio,
+            @QueryParam("fechaFin") String fechaFin
+    ) {
+        log.infof("Obteniendo resumen de ventas para RUT %d entre %s y %s", rut, fechaInicio, fechaFin);
+        try {
+            SalesSummaryDTO resumen = purchaseService.getSalesSummaryByPeriod(rut, fechaInicio, fechaFin);
+            return Response.ok(resumen).build();
+        } catch(Exception e) {
+            log.error("Error al obtener el resumen por periodo", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al obtener el resumen: " + e.getMessage())
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/totalVentas/{rut}")
+    public Response getTotalSales(@PathParam("rut") int rut) {
+        log.infof("Obteniendo el monto total de ventas para comercio con RUT: {}", rut);
+        try {
+            double totalAmount = purchaseService.getTotalSalesAmount(rut);
+
+            JsonObject jsonResponse = Json.createObjectBuilder()
+                    .add("rut", rut)
+                    .add("montoTotal", totalAmount)
+                    .build();
+
+            return Response.ok(jsonResponse).build();
+        } catch (Exception e) {
+            log.error("Error al obtener el monto total de ventas", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al obtener el monto total: " + e.getMessage())
+                    .build();
+        }
+    }
 }

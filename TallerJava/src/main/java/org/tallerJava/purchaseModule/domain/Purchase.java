@@ -21,11 +21,7 @@ public class Purchase {
     @JoinColumn(name = "commerce_rut", referencedColumnName = "rut")
     private PurchaseCommerce commerce;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "card_number", referencedColumnName = "number")
-    private Card card;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pos_id", referencedColumnName = "id")
     private PurchasePos pos;
 

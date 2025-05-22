@@ -62,6 +62,23 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
+    public SalesSummaryDTO getSalesSummaryByPeriod(int rut, String startDate, String endDate) {
+        PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
+
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+
+        ZoneId zone = ZoneId.systemDefault(); // ver de crear helper o similar porque se usa 2 veces
+        Date startToDate = Date.from(start.atStartOfDay(zone).toInstant());
+        Date endToDate = Date.from(end.plusDays(1).atStartOfDay(zone).toInstant()); // Sumamos uno al dia porque sino lo toma desde las 00 AM  en camibo  si lo  hacemos asi toma hasta(exclusivo) 00 del día siguiente
+
+        List<Purchase> purchases = purchaseRepository.findPurchasesByCommerceRutAndDateBetween(commerce, startToDate, endToDate);
+
+        return SalesSummaryDTO.from(purchases);
+    }
+
+    @Override
+    @Transactional
     public double getTotalSalesAmount(int rut) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
         commerce.resetTotalAmountIfDifferentDay();

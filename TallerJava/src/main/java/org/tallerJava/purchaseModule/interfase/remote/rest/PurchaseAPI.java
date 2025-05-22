@@ -59,8 +59,25 @@ public class PurchaseAPI {
         }
     }
 
+    @GET
+    @Path("/resumenVentasPorPeriodo/{rut}")
+    public Response getSalesSummaryByPeriod(
+            @PathParam("rut") int rut,
+            @QueryParam("fechaInicio") String fechaInicio,
+            @QueryParam("fechaFin") String fechaFin
+    ) {
+        log.infof("Obteniendo resumen de ventas para RUT %d entre %s y %s", rut, fechaInicio, fechaFin);
+        try {
+            SalesSummaryDTO resumen = purchaseService.getSalesSummaryByPeriod(rut, fechaInicio, fechaFin);
+            return Response.ok(resumen).build();
+        } catch(Exception e) {
+            log.error("Error al obtener el resumen por periodo", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error al obtener el resumen: " + e.getMessage())
+                    .build();
+        }
+    }
 
-            
     @GET
     @Path("/totalVentas/{rut}")
     public Response getTotalSales(@PathParam("rut") int rut) {
@@ -74,13 +91,11 @@ public class PurchaseAPI {
                     .build();
 
             return Response.ok(jsonResponse).build();
-                    }
-        catch(Exception e) {
+        } catch (Exception e) {
             log.error("Error al obtener el monto total de ventas", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-            .entity("Error al obtener el monto total: " + e.getMessage())
-            .build();
+                    .entity("Error al obtener el monto total: " + e.getMessage())
+                    .build();
         }
     }
-    
 }

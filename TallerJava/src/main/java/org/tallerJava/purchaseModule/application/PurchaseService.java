@@ -9,5 +9,7 @@ public interface PurchaseService {
 
     public double getTotalSalesAmount(int commerceRut);
 
+    public SalesSummaryDTO getSalesSummaryByPeriod(int rut, String startDate, String endDate);
+
     public SalesSummaryDTO getSalesSummaryOfTheDay(int commerceRut);
 }

@@ -1,4 +1,4 @@
-package org.tallerJava.commerceModule.interfase.remote.rest.dto;
+package org.tallerJava.commerceModule.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -9,8 +9,6 @@ import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Complaint;
 import org.tallerJava.commerceModule.domain.Pos;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

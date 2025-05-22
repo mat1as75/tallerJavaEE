@@ -9,9 +9,9 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 import org.tallerJava.commerceModule.application.CommerceService;
 import org.tallerJava.commerceModule.domain.Commerce;
-import org.tallerJava.commerceModule.interfase.remote.rest.dto.CommerceDTO;
-import org.tallerJava.commerceModule.interfase.remote.rest.dto.ComplaintDTO;
-import org.tallerJava.commerceModule.interfase.remote.rest.dto.PosDTO;
+import org.tallerJava.commerceModule.application.dto.CommerceDTO;
+import org.tallerJava.commerceModule.application.dto.ComplaintDTO;
+import org.tallerJava.commerceModule.application.dto.PosDTO;
 import java.util.List;
 
 @ApplicationScoped

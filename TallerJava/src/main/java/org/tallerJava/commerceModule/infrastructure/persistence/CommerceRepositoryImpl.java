@@ -55,26 +55,14 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     public boolean create(Commerce commerce) {
-        boolean isPersistedSuccessfully = false;
-
         if (this.findByRut(commerce.getRut()) != null) return false;
 
         try {
-            em.persist(commerce.getAccount());
-            List<Pos> listPos = new ArrayList<>(commerce.getListPos());
-            List<Complaint> listComplaints = new ArrayList<>(commerce.getListComplaints());
-            for (Pos p : listPos) {
-                em.persist(p);
-            }
-            for (Complaint c : listComplaints) {
-                em.persist(c);
-            }
-            em.merge(commerce);
-            isPersistedSuccessfully = true;
+            em.persist(commerce);
+            return true;
         } catch (PersistenceException e) {
-            throw new PersistenceException("Error al persistir el comercio", e);
+            return false;
         }
-        return isPersistedSuccessfully;
     }
 
     @Override
@@ -101,7 +89,6 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

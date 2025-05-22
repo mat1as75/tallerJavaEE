@@ -16,19 +16,20 @@ import java.util.Set;
 public class Commerce {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int rut;
     private String email;
     private String password;
     @OneToOne(cascade = CascadeType.ALL)
     private CommercialBankAccount account;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "commerce_CommercePos",
     joinColumns = @JoinColumn(name="COMMERCE_RUT"),
     inverseJoinColumns = @JoinColumn(name="POS_ID"))
     private Set<Pos> listPos;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "commerce_CommerceComplaint",
     joinColumns = @JoinColumn(name="COMMERCE_RUT"),
     inverseJoinColumns = @JoinColumn(name="COMPLAINT_ID"))

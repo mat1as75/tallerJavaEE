@@ -34,7 +34,7 @@ public class CommerceAPI {
         if (commerce != null) {
             return Response.status(Response.Status.OK).entity(commerce).build();
         } else {
-            log.error("Comercio no encontrado con Rut: %d" + rut);
+            log.error("Comercio no encontrado con Rut: " + rut);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -82,6 +82,7 @@ public class CommerceAPI {
     @Transactional
     public Response updateCommercePassword(CommerceDTO commerceDTO) {
         log.infof("Actualizando Contraseña de Comercio: ", commerceDTO);
+        System.out.println(commerceDTO);
 
         Commerce commerce = commerceDTO.buildCommerce();
 
@@ -102,7 +103,7 @@ public class CommerceAPI {
         if (commerceService.delete(rut)) {
             return Response.status(Response.Status.OK).build();
         } else {
-            log.error("Comercio no encontrado con Rut: %d" + rut);
+            log.error("Comercio no encontrado con Rut: " + rut);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -116,7 +117,7 @@ public class CommerceAPI {
         if (commerceService.createPos(rut, posDTO.buildPos())) {
             return Response.ok(commerce).build();
         } else {
-            log.error("Comercio no encontrado con Rut: %d" + rut);
+            log.error("Comercio no encontrado con Rut: " + rut);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
@@ -130,7 +131,7 @@ public class CommerceAPI {
         if (commerceService.createComplaint(rut, complaintDTO.getMessage())) {
             return Response.ok(commerce).build();
         } else {
-            log.error("Comercio no encontrado con Rut: %d" + rut);
+            log.error("Comercio no encontrado con Rut: " + rut);
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.tallerJava.commerceModule.domain.Commerce;
+import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Complaint;
 import org.tallerJava.commerceModule.domain.Pos;
 
@@ -20,21 +21,35 @@ public class CommerceDTO {
     private int rut;
     private String email;
     private String password;
+    @JsonProperty("account")
     private CommercialBankAccountDTO account;
+    @JsonProperty("listPos")
     private Set<PosDTO> listPos;
     @JsonProperty("listComplaints")
     private Set<ComplaintDTO> listComplaint;
 
     /* DTO has the responsibility of building its corresponding business object */
     public Commerce buildCommerce() {
-        Set<Pos> listPos = this.listPos.stream()
-                .map(PosDTO::buildPos)
-                .collect(Collectors.toSet());
+        CommercialBankAccount account = null;
+        Set<Pos> listPos = null;
+        Set<Complaint> listComplaint = null;
 
-        Set<Complaint> listComplaint = this.listComplaint.stream()
-                .map(ComplaintDTO::buildComplaint)
-                .collect(Collectors.toSet());
+        if (this.account != null) {
+            account = this.account.buildCommercialBankAccount();
+        }
 
-        return new Commerce(rut, email, password, account.buildCommercialBankAccount(), listPos, listComplaint);
+        if (this.listPos != null) {
+            listPos = this.listPos.stream()
+                    .map(PosDTO::buildPos)
+                    .collect(Collectors.toSet());
+        }
+
+        if (this.listComplaint != null) {
+            listComplaint = this.listComplaint.stream()
+                    .map(ComplaintDTO::buildComplaint)
+                    .collect(Collectors.toSet());
+        }
+
+        return new Commerce(rut, email, password, account, listPos, listComplaint);
     }
 }

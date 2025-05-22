@@ -29,56 +29,35 @@ public class PublisherEventCommerce {
     @Inject
     private Event<CommerceNewPos> changePosStatusEvent;
 
-    public void publishNewCommerce(Commerce commerce) {
-        CommerceCommercialBankAccount commerceAccount = new CommerceCommercialBankAccount(commerce.getAccount().getAccountNumber());
+    private CommerceNewCommerce buildCommerceNewCommerceEvent(Commerce commerce) {
+        int accountNumber = commerce.getAccount().getAccountNumber();
 
-        List<CommercePos> commerceListPos = commerce.getListPos().stream()
+        Map<Integer, Boolean> mapPos = commerce.getListPos().stream()
                 .map(pos -> new CommercePos(pos.getId(), pos.isStatus()))
-                .toList();
-        Map<Integer, Boolean> mapPos = commerceListPos.stream()
                 .collect(Collectors.toMap(CommercePos::getId, CommercePos::isStatus));
 
-        List<CommerceComplaint> commerceListComplaint = commerce.getListComplaints().stream()
+        Map<Integer, String> mapComplaint = commerce.getListComplaints().stream()
                 .map(pos -> new CommerceComplaint(pos.getId(), pos.getMessage()))
-                .toList();
-        Map<Integer, String> mapComplaint = commerceListComplaint.stream()
                 .collect(Collectors.toMap(CommerceComplaint::getId, CommerceComplaint::getMessage));
 
-        CommerceNewCommerce event = new CommerceNewCommerce(
+        return new CommerceNewCommerce(
                 commerce.getRut(),
                 commerce.getEmail(),
                 commerce.getPassword(),
-                commerceAccount.getAccountNumber(),
+                accountNumber,
                 mapPos,
                 mapComplaint
         );
+    }
+
+    public void publishNewCommerce(Commerce commerce) {
+        CommerceNewCommerce event = buildCommerceNewCommerceEvent(commerce);
 
         newCommerceEvent.fire(event);
     }
 
     public void publishUpdateCommerceData(Commerce commerce) {
-        CommerceCommercialBankAccount commerceAccount = new CommerceCommercialBankAccount(commerce.getAccount().getAccountNumber());
-
-        List<CommercePos> commerceListPos = commerce.getListPos().stream()
-                .map(pos -> new CommercePos(pos.getId(), pos.isStatus()))
-                .toList();
-        Map<Integer, Boolean> mapPos = commerceListPos.stream()
-                .collect(Collectors.toMap(CommercePos::getId, CommercePos::isStatus));
-
-        List<CommerceComplaint> commerceListComplaint = commerce.getListComplaints().stream()
-                .map(pos -> new CommerceComplaint(pos.getId(), pos.getMessage()))
-                .toList();
-        Map<Integer, String> mapComplaint = commerceListComplaint.stream()
-                .collect(Collectors.toMap(CommerceComplaint::getId, CommerceComplaint::getMessage));
-
-        CommerceNewCommerce event = new CommerceNewCommerce(
-                (int)commerce.getRut(),
-                commerce.getEmail(),
-                commerce.getPassword(),
-                commerceAccount.getAccountNumber(),
-                mapPos,
-                mapComplaint
-        );
+        CommerceNewCommerce event = buildCommerceNewCommerceEvent(commerce);
 
         updateCommerceDataEvent.fire(event);
     }

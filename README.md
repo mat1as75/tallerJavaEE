@@ -31,7 +31,7 @@ Una **Pasarela de Pagos** es un intermediario entre clientes, comercios y entida
 
 El sistema se compone de varios **subsistemas** que se comunican a través de interfaces definidas:
 
----![diagrama_p8_img1](https://github.com/user-attachments/assets/a6f87bac-ba3f-4001-8496-d52009a1e129)
+![diagrama_p8_img1](https://github.com/user-attachments/assets/a6f87bac-ba3f-4001-8496-d52009a1e129)
 
 ## 🔧 Módulos del Core (Pasarela de Pagos)
 
@@ -42,7 +42,7 @@ Cada módulo implementa una funcionalidad específica del negocio y está diseñ
 - **Transferencias**: Manejo de notificaciones y depósitos.
 - **Monitoreo**: Gestión de eventos relevantes del sistema.
 
----![diagrama_p10_img1](https://github.com/user-attachments/assets/e0a576ba-9150-4eaf-8106-1190964acb2a)
+![diagrama_p10_img1](https://github.com/user-attachments/assets/e0a576ba-9150-4eaf-8106-1190964acb2a)
 
 ## 📌 Requerimientos Funcionales
 

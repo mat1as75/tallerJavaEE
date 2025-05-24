@@ -1,8 +1,6 @@
 package org.tallerJava.commerceModule.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,12 +10,13 @@ import lombok.Setter;
 @Table(name = "commerce_Complaint")
 public class Complaint {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
     String message;
 
     public Complaint() {}
 
-    public Complaint(int id) { this.id = id; }
+    public Complaint(String message) { this.message = message; }
 
     public Complaint(int id, String message) {
         this.id = id;

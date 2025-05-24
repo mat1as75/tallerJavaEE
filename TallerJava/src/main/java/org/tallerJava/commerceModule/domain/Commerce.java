@@ -7,6 +7,7 @@ import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,27 +16,28 @@ import java.util.List;
 public class Commerce {
 
     @Id
-    private int rut;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long rut;
     private String email;
     private String password;
     @OneToOne(cascade = CascadeType.ALL)
     private CommercialBankAccount account;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "commerce_CommercePos",
     joinColumns = @JoinColumn(name="COMMERCE_RUT"),
     inverseJoinColumns = @JoinColumn(name="POS_ID"))
-    private List<Pos> listPos = new ArrayList<>();
+    private Set<Pos> listPos;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "commerce_CommerceComplaint",
     joinColumns = @JoinColumn(name="COMMERCE_RUT"),
     inverseJoinColumns = @JoinColumn(name="COMPLAINT_ID"))
-    private List<Complaint> listComplaints = new ArrayList<>();
+    private Set<Complaint> listComplaints;
 
     public Commerce() {}
 
-    public Commerce(int rut, String email, String password, CommercialBankAccount account, List<Pos> listPos, List<Complaint> listComplaints){
+    public Commerce(long rut, String email, String password, CommercialBankAccount account, Set<Pos> listPos, Set<Complaint> listComplaints){
         this.rut = rut;
         this.email = email;
         this.password = password;

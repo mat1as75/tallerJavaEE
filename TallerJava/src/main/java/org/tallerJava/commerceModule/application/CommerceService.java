@@ -7,14 +7,16 @@ import org.tallerJava.commerceModule.domain.Pos;
 import java.util.List;
 
 public interface CommerceService {
-    public Commerce create(Commerce commerce);
-    public Commerce update(Commerce commerce);
-    public Commerce changePassword(int rut, String newPass);
-    public void delete(int rut);
+    public boolean create(Commerce commerce);
+    public boolean update(Commerce commerce);
+    public boolean updatePassword(long rut, String newPass);
+    public boolean delete(long rut);
 
-    public void makeComplaint(String complaintMessage);
+    public boolean createComplaint(long rut_commerce, String message);
+    public boolean createPos(long rut_commerce, Pos pos);
+    public int changePosStatus(long rut_commerce, Pos pos, boolean status);
 
-    public Commerce getByRut(int rut);
+    public Commerce getByRut(long rut);
     public List<Commerce> getAll();
 
 }

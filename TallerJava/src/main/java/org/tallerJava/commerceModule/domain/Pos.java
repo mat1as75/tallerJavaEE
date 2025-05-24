@@ -1,8 +1,6 @@
 package org.tallerJava.commerceModule.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,13 +10,22 @@ import lombok.Setter;
 @Table(name = "commerce_Pos")
 public class Pos {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    //private int importAmount;
+    //private datosTarjeta
+
     private boolean status;
 
     public Pos() {}
 
     public Pos(int id) {
         this.id = id;
+    }
+
+    public Pos(boolean status) {
+        this.status = status;
     }
 
     public Pos(int id, boolean status) {

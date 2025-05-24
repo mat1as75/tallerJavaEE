@@ -1,9 +1,8 @@
-package org.tallerJava.commerceModule.interfase.remote.rest.dto;
+package org.tallerJava.commerceModule.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.tallerJava.commerceModule.domain.Commerce;
 import org.tallerJava.commerceModule.domain.Pos;
 
 @Data

@@ -2,15 +2,13 @@ package org.tallerJava.commerceModule.application.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 import org.tallerJava.commerceModule.application.CommerceService;
 import org.tallerJava.commerceModule.domain.Commerce;
-import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Pos;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
+import org.tallerJava.commerceModule.interfase.event.out.PublisherEventCommerce;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,34 +19,74 @@ public class CommerceServiceImpl implements CommerceService {
     @Inject
     private CommerceRepository commerceRepository;
 
+    @Inject
+    private PublisherEventCommerce publisherEventCommerce;
+
     @Override
-    public Commerce create(Commerce commerce) {
+    public boolean create(Commerce commerce) {
+        notifyNewCommerce(commerce);
         return commerceRepository.create(commerce);
     }
 
+    private void notifyNewCommerce(Commerce commerce) {
+        publisherEventCommerce.publishNewCommerce(commerce);
+    }
+
     @Override
-    public Commerce update(Commerce commerce) {
+    public boolean update(Commerce commerce) {
+        notifyUpdateCommerceData(commerce);
         return commerceRepository.update(commerce);
     }
 
+    private void notifyUpdateCommerceData(Commerce commerce) {
+        publisherEventCommerce.publishUpdateCommerceData(commerce);
+    }
+
     @Override
-    public Commerce changePassword(int rut, String newPass) {
+    public boolean updatePassword(long rut, String newPass) {
+        notifyUpdatePasswordCommerce(rut, newPass);
         return commerceRepository.updatePassword(rut, newPass);
     }
 
-    @Override
-    public void delete(int rut) {
-        commerceRepository.delete(rut);
-    }
-
-    /* Unfinished */
-    @Override
-    public void makeComplaint(String complaintMessage) {
-        log.infof("Complaint message: %s", complaintMessage);
+    private void notifyUpdatePasswordCommerce(long rut_commerce, String newPass) {
+        publisherEventCommerce.publishUpdatePasswordCommerce(rut_commerce, newPass);
     }
 
     @Override
-    public Commerce getByRut(int rut) {
+    public boolean delete(long rut) { return commerceRepository.delete(rut); }
+
+    @Override
+    public boolean createComplaint(long rut_commerce, String message) {
+        notifyMakeComplaint(rut_commerce, message);
+        return commerceRepository.createComplaint(rut_commerce, message);
+    }
+
+    private void notifyMakeComplaint(long rut_commerce, String message) {
+        publisherEventCommerce.makeCommerceComplaint(rut_commerce, message);
+    }
+
+    @Override
+    public boolean createPos(long rut_commerce, Pos pos) {
+        notifyNewPos(rut_commerce, pos);
+        return commerceRepository.createPos(rut_commerce, pos);
+    }
+
+    private void notifyNewPos(long rut_commerce, Pos pos) {
+        publisherEventCommerce.publishNewPos(rut_commerce, pos.getId(), pos.isStatus());
+    }
+
+    @Override
+    public int changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
+        notifyChangePosStatus(rut_commerce, pos.getId(), newStatus);
+        return commerceRepository.changePosStatus(rut_commerce, pos, newStatus);
+    }
+
+    private void notifyChangePosStatus(long rut_commerce, int id_pos, boolean newStatus) {
+        publisherEventCommerce.publishChangePosStatus(rut_commerce, id_pos, newStatus);
+    }
+
+    @Override
+    public Commerce getByRut(long rut) {
         return commerceRepository.findByRut(rut);
     }
 

@@ -1,4 +1,4 @@
-package org.tallerJava.commerceModule.interfase.remote.rest.dto;
+package org.tallerJava.commerceModule.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +14,6 @@ public class ComplaintDTO {
 
     /* DTO has the responsibility of building its corresponding business object */
     public Complaint buildComplaint() {
-        return new Complaint(id, message);
+        return new Complaint(message);
     }
 }

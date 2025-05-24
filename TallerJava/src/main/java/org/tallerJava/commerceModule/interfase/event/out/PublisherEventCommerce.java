@@ -4,47 +4,87 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import org.tallerJava.commerceModule.domain.Commerce;
-
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PublisherEventCommerce {
 
     @Inject
-    private Event<CommerceCommercialBankAccount> commercialBankAccount;
+    private Event<CommerceNewCommerce> newCommerceEvent;
 
     @Inject
-    private Event<CommercePos> pos;
+    private Event<CommerceNewCommerce> updateCommerceDataEvent;
 
     @Inject
-    private Event<CommerceComplaint> complaint;
+    private Event<CommerceUpdatePassword> updatePasswordEvent;
 
     @Inject
-    private Event<CommerceNewCommerce> newCommerce;
+    private Event<CommerceMakeComplaint> makeComplaintEvent;
 
-    //public void publishNewPos(Pos pos)
+    @Inject
+    private Event<CommerceNewPos> newPosEvent;
 
-    public void pubishNewCommerce(Commerce commerce) {
-        CommerceCommercialBankAccount commerceAccount = new CommerceCommercialBankAccount(commerce.getAccount().getAccountNumber());
+    @Inject
+    private Event<CommerceNewPos> changePosStatusEvent;
 
-        List<CommercePos> commerceListPos = commerce.getListPos().stream()
+    private CommerceNewCommerce buildCommerceNewCommerceEvent(Commerce commerce) {
+        int accountNumber = commerce.getAccount().getAccountNumber();
+
+        Map<Integer, Boolean> mapPos = commerce.getListPos().stream()
                 .map(pos -> new CommercePos(pos.getId(), pos.isStatus()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(CommercePos::getId, CommercePos::isStatus));
 
-        List<CommerceComplaint> commerceListComplaint = commerce.getListComplaints().stream()
+        Map<Integer, String> mapComplaint = commerce.getListComplaints().stream()
                 .map(pos -> new CommerceComplaint(pos.getId(), pos.getMessage()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(CommerceComplaint::getId, CommerceComplaint::getMessage));
 
-        CommerceNewCommerce event = new CommerceNewCommerce(
-                (int)commerce.getRut(),
+        return new CommerceNewCommerce(
+                commerce.getRut(),
                 commerce.getEmail(),
                 commerce.getPassword(),
-                commerceAccount,
-                commerceListPos,
-                commerceListComplaint
+                accountNumber,
+                mapPos,
+                mapComplaint
         );
+    }
 
-        newCommerce.fire(event);
+    public void publishNewCommerce(Commerce commerce) {
+        CommerceNewCommerce event = buildCommerceNewCommerceEvent(commerce);
+
+        newCommerceEvent.fire(event);
+    }
+
+    public void publishUpdateCommerceData(Commerce commerce) {
+        CommerceNewCommerce event = buildCommerceNewCommerceEvent(commerce);
+
+        updateCommerceDataEvent.fire(event);
+    }
+
+    public void publishUpdatePasswordCommerce(long rut_commerce, String newPass) {
+        CommerceUpdatePassword event = new CommerceUpdatePassword(rut_commerce, newPass);
+
+        updatePasswordEvent.fire(event);
+    }
+
+    public void makeCommerceComplaint(long rut_commerce, String message) {
+        CommerceMakeComplaint event = new CommerceMakeComplaint(rut_commerce, message);
+
+        makeComplaintEvent.fire(event);
+    }
+
+    public void publishNewPos(long rut_commerce, int id_pos, boolean status_pos) {
+        CommercePos newPos = new CommercePos(id_pos, status_pos);
+        CommerceNewPos event = new CommerceNewPos(rut_commerce, newPos.getId(), newPos.isStatus());
+
+        newPosEvent.fire(event);
+    }
+
+    public void publishChangePosStatus(long rut_commerce, int id_pos, boolean status_pos) {
+        CommercePos updatedPos = new CommercePos(id_pos, status_pos);
+        CommerceNewPos event = new CommerceNewPos(rut_commerce, updatedPos.getId(), updatedPos.isStatus());
+
+        changePosStatusEvent.fire(event);
     }
 }

@@ -20,20 +20,19 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     @Transactional
-    public Commerce findByRut(int rut) {
-        // Cargar el comercio con la primera colección
-        String query1 = "SELECT c FROM commerce_Commerce c LEFT JOIN FETCH c.listPos WHERE c.rut = :rut";
-        Commerce commerce = em.createQuery(query1, Commerce.class)
-                .setParameter("rut", rut)
-                .getSingleResult();
+    public Commerce findByRut(long rut) {
+        try {
+            String query = "SELECT c FROM commerce_Commerce c " +
+                        "LEFT JOIN FETCH c.listComplaints " +
+                        "LEFT JOIN FETCH c.listPos " +
+                        "WHERE c.rut = :rut";
 
-        // Cargar la segunda colección por separado
-        String query2 = "SELECT c FROM commerce_Commerce c LEFT JOIN FETCH c.listComplaints WHERE c.rut = :rut";
-        commerce = em.createQuery(query2, Commerce.class)
-                .setParameter("rut", rut)
-                .getSingleResult();
-
-        return commerce;
+            return em.createQuery(query, Commerce.class)
+                    .setParameter("rut", rut)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
@@ -55,47 +54,108 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public Commerce create(Commerce commerce) {
-        em.persist(commerce.getAccount());
-        List<Pos> listPos = new ArrayList<>(commerce.getListPos());
-        List<Complaint> listComplaints = new ArrayList<>(commerce.getListComplaints());
-        for (Pos p : listPos) {
-            em.persist(p);
+    public boolean create(Commerce commerce) {
+        if (this.findByRut(commerce.getRut()) != null) return false;
+
+        try {
+            em.persist(commerce);
+            return true;
+        } catch (PersistenceException e) {
+            return false;
         }
-        for (Complaint c : listComplaints) {
-            em.persist(c);
-        }
-        em.persist(commerce);
-        return commerce;
     }
 
     @Override
-    public Commerce update(Commerce commerce) {
-        return em.merge(commerce);
+    public boolean update(Commerce commerce) {
+        try {
+            return em.merge(commerce) != null;
+        } catch (PersistenceException e) {
+            return false;
+        }
     }
 
     @Override
-    public Commerce updatePassword(int rut, String newPass) {
+    public boolean updatePassword(long rut, String newPass) {
         Commerce commerceToUpdatePass = this.findByRut(rut);
-        if (commerceToUpdatePass == null) return null;
+        if (commerceToUpdatePass == null) return false;
 
         String query = "UPDATE commerce_Commerce c SET c.password = :newPass WHERE c.rut = :rut";
-        Query updatePassword = em.createQuery(query);
         try {
+            Query updatePassword = em.createQuery(query);
             updatePassword.setParameter("newPass", newPass);
             updatePassword.setParameter("rut", rut);
             updatePassword.executeUpdate();
             em.flush();
 
-            return this.findByRut(rut);
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return false;
         }
     }
 
     @Override
-    public void delete(int rut) {
-        em.remove(this.findByRut(rut));
+    public boolean delete(long rut) {
+        Commerce commerce = this.findByRut(rut);
+        if (commerce == null) return false;
+
+        try {
+            em.remove(this.findByRut(rut));
+            return true;
+        } catch (PersistenceException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createComplaint(long rut_commerce, String message) {
+        Commerce commerce = this.findByRut(rut_commerce);
+        if (commerce == null) return false;
+        Complaint complaint = new Complaint(message);
+
+        try {
+            em.persist(complaint);
+            commerce.getListComplaints().add(complaint);
+            em.merge(commerce);
+            return true;
+        } catch (PersistenceException e) {
+            System.out.println("Fallo al crear el reclamo en CommerceRepositoryImpl.createComplaint()");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean createPos(long rut_commerce, Pos pos) {
+        Commerce commerce = this.findByRut(rut_commerce);
+        if (commerce == null) return false;
+
+        try {
+            Pos newPos = new Pos(pos.getId(), pos.isStatus());
+            commerce.getListPos().add(newPos);
+            em.merge(commerce);
+            return true;
+        } catch (PersistenceException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public int changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
+        Commerce commerce = this.findByRut(rut_commerce);
+        if (commerce == null) return -1;
+
+        try {
+            Pos updatePos = commerce.getListPos().stream()
+                    .filter(p -> p.getId() == pos.getId())
+                    .findFirst()
+                    .orElse(null);
+
+            if (updatePos == null) return -2;
+
+            updatePos.setStatus(newStatus);
+            em.merge(commerce);
+            return 1;
+        } catch (PersistenceException e) {
+            return 0;
+        }
     }
 }

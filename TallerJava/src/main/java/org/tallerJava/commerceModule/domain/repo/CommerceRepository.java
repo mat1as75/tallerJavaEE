@@ -6,12 +6,15 @@ import org.tallerJava.commerceModule.domain.Pos;
 import java.util.List;
 
 public interface CommerceRepository {
-    public Commerce findByRut(int rut);
+    public Commerce findByRut(long rut);
     public List<Commerce> findAll();
-    public Commerce create(Commerce commerce);
-    public Commerce update(Commerce commerce);
-    public Commerce updatePassword(int rut, String newPass);
-    public void delete(int rut);
+    public boolean create(Commerce commerce);
+    public boolean update(Commerce commerce);
+    public boolean updatePassword(long rut, String newPass);
+    public boolean delete(long rut);
 
+    public boolean createComplaint(long rut_commerce, String message);
+    public boolean createPos(long rut_commerce, Pos pos);
+    public int changePosStatus(long rut_commerce, Pos pos, boolean status);
 
 }

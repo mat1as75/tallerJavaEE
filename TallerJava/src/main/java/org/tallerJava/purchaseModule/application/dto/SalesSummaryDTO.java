@@ -1,4 +1,4 @@
-package org.tallerJava.purchaseModule.interfase.remote.rest.dto;
+package org.tallerJava.purchaseModule.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -10,12 +10,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 import org.tallerJava.purchaseModule.application.PurchaseService;
-import org.tallerJava.purchaseModule.domain.Card;
-import org.tallerJava.purchaseModule.domain.Purchase;
-import org.tallerJava.purchaseModule.interfase.remote.rest.dto.PaymentDataDTO;
-import org.tallerJava.purchaseModule.interfase.remote.rest.dto.SalesSummaryDTO;
-
-import java.util.List;
+import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
+import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
 
 @ApplicationScoped
 @Path("/purchase")
@@ -30,12 +26,8 @@ public class PurchaseAPI {
     @POST
     @Transactional
     public Response processPayment(PaymentDataDTO paymentData) {
-        Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
-        Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
-        int id_commerce = paymentData.getCommerceRut();
-        int id_pos = paymentData.getPosId();
         try {
-            purchaseService.processPayment(purchase, card, id_commerce,id_pos);
+            purchaseService.processPayment(paymentData);
             return Response.ok("Pago procesado exitosamente").build();
         }catch(Exception e){
             return Response.status(Response.Status.NOT_FOUND)
@@ -46,7 +38,7 @@ public class PurchaseAPI {
 
     @GET
     @Path("/resumenVentasDiarias/{rut}")
-    public Response getDailySalesSummary(@PathParam("rut") int rut) {
+    public Response getDailySalesSummary(@PathParam("rut") long rut) {
         log.infof("Obteniendo resumen de ventas diarias para comercio con RUT: {}", rut);
         try {
             SalesSummaryDTO dtoResumen = purchaseService.getSalesSummaryOfTheDay(rut);
@@ -62,7 +54,7 @@ public class PurchaseAPI {
     @GET
     @Path("/resumenVentasPorPeriodo/{rut}")
     public Response getSalesSummaryByPeriod(
-            @PathParam("rut") int rut,
+            @PathParam("rut") long rut,
             @QueryParam("fechaInicio") String fechaInicio,
             @QueryParam("fechaFin") String fechaFin
     ) {
@@ -80,7 +72,7 @@ public class PurchaseAPI {
 
     @GET
     @Path("/totalVentas/{rut}")
-    public Response getTotalSales(@PathParam("rut") int rut) {
+    public Response getTotalSales(@PathParam("rut") long rut) {
         log.infof("Obteniendo el monto total de ventas para comercio con RUT: {}", rut);
         try {
             double totalAmount = purchaseService.getTotalSalesAmount(rut);

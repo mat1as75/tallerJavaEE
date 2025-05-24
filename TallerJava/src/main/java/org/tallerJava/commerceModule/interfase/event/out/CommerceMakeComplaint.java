@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CommerceMakeClaim {
+public class CommerceMakeComplaint {
     private long rut_commerce;
     private String message;
 }

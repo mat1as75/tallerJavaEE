@@ -14,8 +14,7 @@ public interface CommerceService {
 
     public boolean createComplaint(long rut_commerce, String message);
     public boolean createPos(long rut_commerce, Pos pos);
-    public boolean changePosStatus(long rut_commerce, Pos pos, boolean status);
-
+    public int changePosStatus(long rut_commerce, Pos pos, boolean status);
 
     public Commerce getByRut(long rut);
     public List<Commerce> getAll();

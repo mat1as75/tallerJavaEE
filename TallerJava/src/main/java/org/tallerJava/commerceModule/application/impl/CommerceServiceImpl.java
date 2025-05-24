@@ -76,7 +76,7 @@ public class CommerceServiceImpl implements CommerceService {
     }
 
     @Override
-    public boolean changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
+    public int changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
         notifyChangePosStatus(rut_commerce, pos.getId(), newStatus);
         return commerceRepository.changePosStatus(rut_commerce, pos, newStatus);
     }

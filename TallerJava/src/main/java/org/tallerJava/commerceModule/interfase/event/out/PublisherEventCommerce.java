@@ -21,7 +21,7 @@ public class PublisherEventCommerce {
     private Event<CommerceUpdatePassword> updatePasswordEvent;
 
     @Inject
-    private Event<CommerceMakeClaim> makeComplaintEvent;
+    private Event<CommerceMakeComplaint> makeComplaintEvent;
 
     @Inject
     private Event<CommerceNewPos> newPosEvent;
@@ -69,7 +69,7 @@ public class PublisherEventCommerce {
     }
 
     public void makeCommerceComplaint(long rut_commerce, String message) {
-        CommerceMakeClaim event = new CommerceMakeClaim(rut_commerce, message);
+        CommerceMakeComplaint event = new CommerceMakeComplaint(rut_commerce, message);
 
         makeComplaintEvent.fire(event);
     }

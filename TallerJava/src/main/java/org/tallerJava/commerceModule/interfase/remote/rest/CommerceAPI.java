@@ -136,4 +136,36 @@ public class CommerceAPI {
         }
     }
 
+    @PATCH
+    @Path("/{rut}/changePosStatus")
+    @Transactional
+    public Response changePosStatus(@PathParam("rut") int rut, PosDTO posDTO) {
+        log.infof("Cambiando Estado de Pos con Rut: %d", rut);
+        Commerce commerce = commerceService.getByRut(rut);
+
+        int res = commerceService.changePosStatus(rut, posDTO.buildPos(), posDTO.isStatus());
+        return switch (res) {
+            case 1 -> {
+                log.infof("Pos con Rut: %d cambiado a estado: %b", rut, posDTO.isStatus());
+                yield Response.ok(commerce).build();
+            }
+            case 0 -> {
+                log.error("Error al cambiar estado de Pos con Rut: " + rut + " y Pos: " + posDTO.getId());
+                yield Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+            case -1 -> {
+                log.error("Comercio no encontrado con Rut: " + rut);
+                yield Response.status(Response.Status.NOT_FOUND).build();
+            }
+            case -2 -> {
+                log.error("Pos no encontrado con Rut: " + rut + " y Pos: " + posDTO.getId());
+                yield Response.status(Response.Status.NOT_FOUND).build();
+            }
+            default -> {
+                log.error("Error desconocido al cambiar estado de Pos con Rut: " + rut + " y Pos: " + posDTO.getId());
+                yield Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            }
+        };
+    }
+
 }

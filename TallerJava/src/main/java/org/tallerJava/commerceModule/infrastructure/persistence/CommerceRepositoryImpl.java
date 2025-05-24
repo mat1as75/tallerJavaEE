@@ -139,9 +139,9 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public boolean changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
+    public int changePosStatus(long rut_commerce, Pos pos, boolean newStatus) {
         Commerce commerce = this.findByRut(rut_commerce);
-        if (commerce == null) return false;
+        if (commerce == null) return -1;
 
         try {
             Pos updatePos = commerce.getListPos().stream()
@@ -149,13 +149,13 @@ public class CommerceRepositoryImpl implements CommerceRepository {
                     .findFirst()
                     .orElse(null);
 
-            if (updatePos == null) return false;
+            if (updatePos == null) return -2;
 
             updatePos.setStatus(newStatus);
             em.merge(commerce);
-            return true;
+            return 1;
         } catch (PersistenceException e) {
-            return false;
+            return 0;
         }
     }
 }

@@ -1,15 +1,16 @@
 package org.tallerJava.purchaseModule.application;
 
+import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
 import org.tallerJava.purchaseModule.domain.Card;
 import org.tallerJava.purchaseModule.domain.Purchase;
-import org.tallerJava.purchaseModule.interfase.remote.rest.dto.SalesSummaryDTO;
+import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
 
 public interface PurchaseService {
-    public void processPayment(Purchase purchase, Card card, int rut, int posId);
+    public void processPayment(PaymentDataDTO paymentData);
 
-    public double getTotalSalesAmount(int commerceRut);
+    public double getTotalSalesAmount(long commerceRut);
 
-    public SalesSummaryDTO getSalesSummaryByPeriod(int rut, String startDate, String endDate);
+    public SalesSummaryDTO getSalesSummaryByPeriod(long rut, String startDate, String endDate);
 
-    public SalesSummaryDTO getSalesSummaryOfTheDay(int commerceRut);
+    public SalesSummaryDTO getSalesSummaryOfTheDay(long commerceRut);
 }

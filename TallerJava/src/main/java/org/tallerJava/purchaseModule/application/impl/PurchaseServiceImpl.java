@@ -5,6 +5,7 @@ import org.tallerJava.purchaseModule.application.PurchaseService;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
 import org.tallerJava.purchaseModule.domain.Card;
 import org.tallerJava.purchaseModule.domain.Purchase;
 
@@ -13,7 +14,7 @@ import org.tallerJava.purchaseModule.domain.PurchasePos;
 import org.tallerJava.purchaseModule.domain.repo.CommerceRepository;
 import org.tallerJava.purchaseModule.domain.repo.PosRepository;
 import org.tallerJava.purchaseModule.domain.repo.PurchaseRepository;
-import org.tallerJava.purchaseModule.interfase.remote.rest.dto.SalesSummaryDTO;
+import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -32,7 +33,12 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public void processPayment(Purchase purchase, Card card, int rut, int posId) {
+    public void processPayment(PaymentDataDTO paymentData) {
+        Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
+        Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
+        long rut = paymentData.getCommerceRut();
+        int posId = paymentData.getPosId();
+
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
         PurchasePos pos = PosRepository.findById(posId);
         if (!pos.isStatus()) {
@@ -47,7 +53,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public SalesSummaryDTO getSalesSummaryOfTheDay(int rut) {
+    public SalesSummaryDTO getSalesSummaryOfTheDay(long rut) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
 
         LocalDate today = LocalDate.now();
@@ -62,7 +68,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public SalesSummaryDTO getSalesSummaryByPeriod(int rut, String startDate, String endDate) {
+    public SalesSummaryDTO getSalesSummaryByPeriod(long rut, String startDate, String endDate) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
 
         LocalDate start = LocalDate.parse(startDate);
@@ -79,7 +85,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public double getTotalSalesAmount(int rut) {
+    public double getTotalSalesAmount(long rut) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
         commerce.resetTotalAmountIfDifferentDay();
         return commerce.getTotalSalesAmount();

@@ -16,7 +16,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     @Transactional
-    public PurchaseCommerce findByRut(int rut) {
+    public PurchaseCommerce findByRut(long rut) {
         try {
             return em.createQuery(
                             "SELECT c FROM purchase_Commerce c WHERE c.rut = :rut",

@@ -15,4 +15,10 @@ public class PurchasePos {
     @Id
     private int id;
     private boolean status;
+
+    public PurchasePos() {}
+    public PurchasePos(int id, boolean status) {
+        this.id = id;
+        this.status = status;
+    }
 }

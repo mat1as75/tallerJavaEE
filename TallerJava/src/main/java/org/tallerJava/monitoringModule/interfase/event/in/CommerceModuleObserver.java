@@ -17,7 +17,7 @@ public class CommerceModuleObserver {
     private MonitoringService monitoringService;
 
     public void accept(@Observes CommerceMakeComplaint event) {
-        log.infof("New Commerce: %s", event);
+        log.infof("Nuevo Comercio: %s", event);
         Complaint complaint = new Complaint(event.getRut_commerce(), event.getMessage());
 
         monitoringService.makeComplaint(complaint);

@@ -26,3 +26,11 @@ connect
     catch
         echo "No se crea datasource, ya existe"
     end-try
+
+    try
+        deploy --force ../PaymentMethod/target/PaymentMethod-1.0-SNAPSHOT.war
+        echo "Se despliega ../PaymentMethod/target/PaymentMethod-1.0-SNAPSHOT.war"
+    catch
+        echo "Ya estaba desplegado ../PaymentMethod/target/PaymentMethod-1.0-SNAPSHOT.war"
+    end-try
+

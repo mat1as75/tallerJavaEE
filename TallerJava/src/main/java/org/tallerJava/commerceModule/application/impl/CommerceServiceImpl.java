@@ -9,8 +9,8 @@ import org.tallerJava.commerceModule.domain.Pos;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
 import org.tallerJava.commerceModule.interfase.event.out.PublisherEventCommerce;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 @ApplicationScoped
 public class CommerceServiceImpl implements CommerceService {
@@ -25,6 +25,13 @@ public class CommerceServiceImpl implements CommerceService {
     @Override
     public boolean create(Commerce commerce) {
         notifyNewCommerce(commerce);
+        List<Pos> listPos = new ArrayList<>(commerce.getListPos());
+
+        // Si contiene algun Pos
+        if (!listPos.isEmpty()) {
+            // Notifico un nuevo Pos
+            notifyNewPos(commerce.getRut(), listPos.getFirst());
+        }
         return commerceRepository.create(commerce);
     }
 

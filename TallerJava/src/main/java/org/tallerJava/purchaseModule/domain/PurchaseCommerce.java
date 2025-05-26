@@ -17,7 +17,8 @@ import java.util.List;
 @Table(name = "purchase_Commerce")
 public class PurchaseCommerce {
     @Id
-    private int rut;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long rut;
 
     @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL)
     private List<Purchase> purchases = new ArrayList<>();
@@ -26,7 +27,7 @@ public class PurchaseCommerce {
 
     private double totalSalesAmount = 0d;
 
-    public PurchaseCommerce(int rut) {
+    public PurchaseCommerce(long rut) {
         this.rut = rut;
     }
 

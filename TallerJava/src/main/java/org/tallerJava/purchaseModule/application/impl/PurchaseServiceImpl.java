@@ -32,7 +32,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public void processPayment(Purchase purchase, Card card, int rut, int posId) {
+    public void processPayment(Purchase purchase, Card card, long rut, int posId) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
         PurchasePos pos = PosRepository.findById(posId);
         if (!pos.isStatus()) {
@@ -47,7 +47,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public SalesSummaryDTO getSalesSummaryOfTheDay(int rut) {
+    public SalesSummaryDTO getSalesSummaryOfTheDay(long rut) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
 
         LocalDate today = LocalDate.now();
@@ -62,7 +62,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public SalesSummaryDTO getSalesSummaryByPeriod(int rut, String startDate, String endDate) {
+    public SalesSummaryDTO getSalesSummaryByPeriod(long rut, String startDate, String endDate) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
 
         LocalDate start = LocalDate.parse(startDate);
@@ -79,10 +79,27 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     @Transactional
-    public double getTotalSalesAmount(int rut) {
+    public double getTotalSalesAmount(long rut) {
         PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
         commerce.resetTotalAmountIfDifferentDay();
         return commerce.getTotalSalesAmount();
     }
 
+    @Override
+    @Transactional
+    public boolean createCommerce(PurchaseCommerce commerce) {
+        return CommerceRepository.create(commerce);
+    }
+
+    @Override
+    @Transactional
+    public boolean createPos(PurchasePos pos) {
+        return PosRepository.createPos(pos);
+    }
+
+    @Override
+    @Transactional
+    public int changePosStatus(PurchasePos pos) {
+        return PosRepository.changePosStatus(pos);
+    }
 }

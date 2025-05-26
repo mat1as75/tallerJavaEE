@@ -14,7 +14,7 @@ public class PaymentDataDTO {
     private float amount;
     private int posId;
     private CardDataDTO cardData;
-    private int commerceRut;
+    private long commerceRut;
 
     public static Purchase buildPurchase(PaymentDataDTO dto_purchase) {
         Purchase purchase = new Purchase();

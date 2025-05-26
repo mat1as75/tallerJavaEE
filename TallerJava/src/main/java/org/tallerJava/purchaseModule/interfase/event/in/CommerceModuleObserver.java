@@ -28,16 +28,14 @@ public class CommerceModuleObserver {
         log.infof("Nuevo Comercio: %s", event);
         PurchasePos newPos = new PurchasePos(event.getId_pos(), event.isStatus());
 
-        purchaseService.createPos(event.getRut_commerce(), newPos);
+        purchaseService.createPos(newPos);
     }
 
     public void acceptChangePosStatus(@Observes CommerceNewPos event) {
         log.infof("Cambio Estado Pos: %s", event);
-        purchaseService. //event.getRut_commerce()
         PurchasePos newPos = new PurchasePos(event.getId_pos(), event.isStatus());
+
+        purchaseService.changePosStatus(newPos);
     }
 
-    public void accept(@Observes Commerce event) {
-
-    }
 }

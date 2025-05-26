@@ -1,15 +1,16 @@
 package org.tallerJava.commerceModule.infrastructure.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
+import org.jboss.logging.Logger;
 import org.tallerJava.commerceModule.domain.Commerce;
-import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Complaint;
 import org.tallerJava.commerceModule.domain.Pos;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
+import org.tallerJava.monitoringModule.interfase.event.in.PurchaseModuleObserver;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -18,19 +19,24 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     @PersistenceContext
     private EntityManager em;
 
+    private static final Logger log = Logger.getLogger(CommerceRepositoryImpl.class);
+
     @Override
     @Transactional
     public Commerce findByRut(long rut) {
         try {
             String query = "SELECT c FROM commerce_Commerce c " +
-                        "LEFT JOIN FETCH c.listComplaints " +
-                        "LEFT JOIN FETCH c.listPos " +
-                        "WHERE c.rut = :rut";
+                    "LEFT JOIN FETCH c.listComplaints " +
+                    "LEFT JOIN FETCH c.listPos " +
+                    "WHERE c.rut = :rut";
 
-            return em.createQuery(query, Commerce.class)
+            List<Commerce> commerce = em.createQuery(query, Commerce.class)
                     .setParameter("rut", rut)
-                    .getSingleResult();
+                    .getResultList();
+
+            return commerce.isEmpty() ? null : commerce.getFirst();
         } catch (NoResultException e) {
+            log.info("No se encontró comercio con rut: " + rut);
             return null;
         }
     }
@@ -55,18 +61,22 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     public boolean create(Commerce commerce) {
-        if (this.findByRut(commerce.getRut()) != null) return false;
+        if (commerce.getRut() != 0)
+            if (this.findByRut(commerce.getRut()) != null) return false;
 
         try {
             em.persist(commerce);
             return true;
         } catch (PersistenceException e) {
-            return false;
+            throw e;
         }
     }
 
     @Override
     public boolean update(Commerce commerce) {
+        if (commerce.getRut() != 0)
+            if (this.findByRut(commerce.getRut()) == null) return false;
+
         try {
             return em.merge(commerce) != null;
         } catch (PersistenceException e) {

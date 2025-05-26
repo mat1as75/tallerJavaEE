@@ -7,19 +7,18 @@ import org.tallerJava.purchaseModule.domain.PurchaseCommerce;
 import org.tallerJava.purchaseModule.interfase.remote.rest.dto.SalesSummaryDTO;
 
 public interface PurchaseService {
-    public void processPayment(Purchase purchase, Card card, int rut, int posId);
+    public void processPayment(Purchase purchase, Card card, long rut, int posId);
 
-    public double getTotalSalesAmount(int commerceRut);
+    public double getTotalSalesAmount(long commerceRut);
 
-    public SalesSummaryDTO getSalesSummaryByPeriod(int rut, String startDate, String endDate);
+    public SalesSummaryDTO getSalesSummaryByPeriod(long rut, String startDate, String endDate);
 
-    public SalesSummaryDTO getSalesSummaryOfTheDay(int commerceRut);
+    public SalesSummaryDTO getSalesSummaryOfTheDay(long commerceRut);
 
     public boolean createCommerce(PurchaseCommerce commerce);
 
-    public boolean createPos(long rut_commerce, PurchasePos pos);
+    public boolean createPos(PurchasePos pos);
 
-    public int changePosStatus(long rut_commerce, PurchasePos pos, boolean status);
+    public int changePosStatus(PurchasePos pos);
 
-    public PurchaseCommerce getByRut(long rut);
 }

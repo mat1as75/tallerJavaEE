@@ -1,9 +1,7 @@
 package org.tallerJava.purchaseModule.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +11,7 @@ import lombok.Setter;
 @Table(name = "purchase_Pos")
 public class PurchasePos {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private boolean status;
 

@@ -32,7 +32,7 @@ public class PurchaseAPI {
     public Response processPayment(PaymentDataDTO paymentData) {
         Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
         Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
-        int id_commerce = paymentData.getCommerceRut();
+        long id_commerce = paymentData.getCommerceRut();
         int id_pos = paymentData.getPosId();
         try {
             purchaseService.processPayment(purchase, card, id_commerce,id_pos);
@@ -46,7 +46,7 @@ public class PurchaseAPI {
 
     @GET
     @Path("/resumenVentasDiarias/{rut}")
-    public Response getDailySalesSummary(@PathParam("rut") int rut) {
+    public Response getDailySalesSummary(@PathParam("rut") long rut) {
         log.infof("Obteniendo resumen de ventas diarias para comercio con RUT: {}", rut);
         try {
             SalesSummaryDTO dtoResumen = purchaseService.getSalesSummaryOfTheDay(rut);
@@ -62,7 +62,7 @@ public class PurchaseAPI {
     @GET
     @Path("/resumenVentasPorPeriodo/{rut}")
     public Response getSalesSummaryByPeriod(
-            @PathParam("rut") int rut,
+            @PathParam("rut") long rut,
             @QueryParam("fechaInicio") String fechaInicio,
             @QueryParam("fechaFin") String fechaFin
     ) {
@@ -80,7 +80,7 @@ public class PurchaseAPI {
 
     @GET
     @Path("/totalVentas/{rut}")
-    public Response getTotalSales(@PathParam("rut") int rut) {
+    public Response getTotalSales(@PathParam("rut") long rut) {
         log.infof("Obteniendo el monto total de ventas para comercio con RUT: {}", rut);
         try {
             double totalAmount = purchaseService.getTotalSalesAmount(rut);

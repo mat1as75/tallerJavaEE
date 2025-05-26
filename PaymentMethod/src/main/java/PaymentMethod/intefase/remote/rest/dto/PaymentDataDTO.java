@@ -10,4 +10,6 @@ public class PaymentDataDTO {
     private int posId;
     private CardDataDTO cardData;
     private long commerceRut;
+
+    PaymentDataDTO() {}
 }

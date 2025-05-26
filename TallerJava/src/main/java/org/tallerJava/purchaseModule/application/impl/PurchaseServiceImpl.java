@@ -1,6 +1,11 @@
 package org.tallerJava.purchaseModule.application.impl;
 
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.tallerJava.purchaseModule.application.PurchaseService;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,7 +49,9 @@ public class PurchaseServiceImpl implements PurchaseService {
         if (!pos.isStatus()) {
             throw new IllegalStateException("El POS está inactivo o no disponible");
         }
-        //Falta agregar validación de la tarjeta frente a Medios de pago
+
+        PaymentCommit(paymentData);
+
         purchase.setPos(pos);
         purchaseRepository.create(purchase);
         commerce.addPurchase(purchase);
@@ -91,4 +98,23 @@ public class PurchaseServiceImpl implements PurchaseService {
         return commerce.getTotalSalesAmount();
     }
 
+    private void PaymentCommit(PaymentDataDTO paymentData){
+        Client client = ClientBuilder.newClient();
+        String url = "http://localhost:8080/PaymentMethod-1.0-SNAPSHOT/api";
+
+        Response response = client
+                .target(url)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(paymentData, MediaType.APPLICATION_JSON));
+
+        if (response.getStatus() == 200) {
+            System.out.println("Respuesta backend PaymentMethod: " + response.readEntity(String.class));
+        } else {
+            String errorMsg = response.readEntity(String.class);
+            System.err.println("Error al procesar medio de pago: " + errorMsg);
+        }
+
+        response.close();
+        client.close();
+    }
 }

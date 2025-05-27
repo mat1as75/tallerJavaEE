@@ -16,7 +16,6 @@ import java.util.Set;
 public class Commerce {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rut;
     private String email;
     private String password;

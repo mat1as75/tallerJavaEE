@@ -4,6 +4,8 @@ import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
 import org.tallerJava.purchaseModule.domain.Card;
 import org.tallerJava.purchaseModule.domain.Purchase;
 import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
+import org.tallerJava.purchaseModule.domain.PurchaseCommerce;
+import org.tallerJava.purchaseModule.domain.PurchasePos;
 
 public interface PurchaseService {
     public void processPayment(PaymentDataDTO paymentData);
@@ -13,4 +15,10 @@ public interface PurchaseService {
     public SalesSummaryDTO getSalesSummaryByPeriod(long rut, String startDate, String endDate);
 
     public SalesSummaryDTO getSalesSummaryOfTheDay(long commerceRut);
+
+    public boolean createCommerce(PurchaseCommerce commerce);
+
+    public boolean createPos(PurchasePos pos);
+
+    public int changePosStatus(PurchasePos pos);
 }

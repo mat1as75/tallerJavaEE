@@ -82,7 +82,6 @@ public class CommerceAPI {
     @Transactional
     public Response updateCommercePassword(CommerceDTO commerceDTO) {
         log.infof("Actualizando Contraseña de Comercio: ", commerceDTO);
-        System.out.println(commerceDTO);
 
         Commerce commerce = commerceDTO.buildCommerce();
 
@@ -97,7 +96,7 @@ public class CommerceAPI {
     @DELETE
     @Path("/{rut}")
     @Transactional
-    public Response deleteCommerce(@PathParam("rut") int rut) {
+    public Response deleteCommerce(@PathParam("rut") long rut) {
         log.infof("Eliminando Comercio con Rut: %d", rut);
 
         if (commerceService.delete(rut)) {
@@ -111,7 +110,7 @@ public class CommerceAPI {
     @POST
     @Path("/{rut}/pos")
     @Transactional
-    public Response createPos(@PathParam("rut") int rut, PosDTO posDTO) {
+    public Response createPos(@PathParam("rut") long rut, PosDTO posDTO) {
         log.infof("Creando Pos con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);
         if (commerceService.createPos(rut, posDTO.buildPos())) {
@@ -125,7 +124,7 @@ public class CommerceAPI {
     @POST
     @Path("/{rut}/makeComplaint")
     @Transactional
-    public Response makeComplaint(@PathParam("rut") int rut, ComplaintDTO complaintDTO) {
+    public Response makeComplaint(@PathParam("rut") long rut, ComplaintDTO complaintDTO) {
         log.infof("Haciendo Reclamo con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);
         if (commerceService.createComplaint(rut, complaintDTO.getMessage())) {
@@ -139,7 +138,7 @@ public class CommerceAPI {
     @PATCH
     @Path("/{rut}/changePosStatus")
     @Transactional
-    public Response changePosStatus(@PathParam("rut") int rut, PosDTO posDTO) {
+    public Response changePosStatus(@PathParam("rut") long rut, PosDTO posDTO) {
         log.infof("Cambiando Estado de Pos con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);
 

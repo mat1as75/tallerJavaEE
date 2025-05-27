@@ -11,6 +11,7 @@ import org.tallerJava.purchaseModule.application.PurchaseService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
+import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
 import org.tallerJava.purchaseModule.domain.Card;
 import org.tallerJava.purchaseModule.domain.Purchase;
 
@@ -19,7 +20,6 @@ import org.tallerJava.purchaseModule.domain.PurchasePos;
 import org.tallerJava.purchaseModule.domain.repo.CommerceRepository;
 import org.tallerJava.purchaseModule.domain.repo.PosRepository;
 import org.tallerJava.purchaseModule.domain.repo.PurchaseRepository;
-import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -98,6 +98,24 @@ public class PurchaseServiceImpl implements PurchaseService {
         return commerce.getTotalSalesAmount();
     }
 
+    @Override
+    @Transactional
+    public boolean createCommerce(PurchaseCommerce commerce) {
+        return CommerceRepository.create(commerce);
+    }
+
+    @Override
+    @Transactional
+    public boolean createPos(PurchasePos pos) {
+        return PosRepository.createPos(pos);
+    }
+
+    @Override
+    @Transactional
+    public int changePosStatus(PurchasePos pos) {
+        return PosRepository.changePosStatus(pos);
+    }
+
     private void PaymentCommit(PaymentDataDTO paymentData){
         Client client = ClientBuilder.newClient();
         String url = "http://localhost:8080/PaymentMethod-1.0-SNAPSHOT/api";
@@ -117,4 +135,5 @@ public class PurchaseServiceImpl implements PurchaseService {
         response.close();
         client.close();
     }
+
 }

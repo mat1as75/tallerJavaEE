@@ -1,13 +1,14 @@
 package org.tallerJava.purchaseModule.application;
 
-import org.tallerJava.purchaseModule.domain.PurchasePos;
+import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
 import org.tallerJava.purchaseModule.domain.Card;
 import org.tallerJava.purchaseModule.domain.Purchase;
+import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
 import org.tallerJava.purchaseModule.domain.PurchaseCommerce;
-import org.tallerJava.purchaseModule.interfase.remote.rest.dto.SalesSummaryDTO;
+import org.tallerJava.purchaseModule.domain.PurchasePos;
 
 public interface PurchaseService {
-    public void processPayment(Purchase purchase, Card card, long rut, int posId);
+    public void processPayment(PaymentDataDTO paymentData);
 
     public double getTotalSalesAmount(long commerceRut);
 
@@ -20,5 +21,4 @@ public interface PurchaseService {
     public boolean createPos(PurchasePos pos);
 
     public int changePosStatus(PurchasePos pos);
-
 }

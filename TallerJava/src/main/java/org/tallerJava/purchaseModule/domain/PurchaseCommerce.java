@@ -17,7 +17,6 @@ import java.util.List;
 @Table(name = "purchase_Commerce")
 public class PurchaseCommerce {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rut;
 
     @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL)

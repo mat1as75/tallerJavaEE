@@ -4,6 +4,6 @@ import org.tallerJava.purchaseModule.domain.PurchaseCommerce;
 
 public interface CommerceRepository {
     public PurchaseCommerce findByRut(long rut);
-    public boolean create(PurchaseCommerce commerce);
 
+    public boolean create(PurchaseCommerce commerce);
 }

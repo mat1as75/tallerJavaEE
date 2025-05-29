@@ -11,5 +11,5 @@ public class PaymentDataDTO {
     private CardDataDTO cardData;
     private long commerceRut;
 
-    PaymentDataDTO() {}
+    public PaymentDataDTO() {}
 }

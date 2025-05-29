@@ -20,6 +20,7 @@ import org.tallerJava.purchaseModule.domain.PurchasePos;
 import org.tallerJava.purchaseModule.domain.repo.CommerceRepository;
 import org.tallerJava.purchaseModule.domain.repo.PosRepository;
 import org.tallerJava.purchaseModule.domain.repo.PurchaseRepository;
+import org.tallerJava.purchaseModule.exceptions.PaymentException;
 import org.tallerJava.purchaseModule.interfase.event.out.PublisherEventPurchase;
 
 import java.time.LocalDate;
@@ -42,23 +43,32 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     @Transactional
     public void processPayment(PaymentDataDTO paymentData) {
-        Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
-        Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
-        long rut = paymentData.getCommerceRut();
-        int posId = paymentData.getPosId();
+        try {
+            // Notifico pago
+            publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), -1);
 
-        PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
-        PurchasePos pos = PosRepository.findById(posId);
-        if (!pos.isStatus()) {
-            throw new IllegalStateException("El POS está inactivo o no disponible");
+            Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
+            Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
+            long rut = paymentData.getCommerceRut();
+            int posId = paymentData.getPosId();
+            PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
+            PurchasePos pos = PosRepository.findById(posId);
+            if (!pos.isStatus()) {
+                throw new IllegalStateException("El POS está inactivo o no disponible");
+            }
+            PaymentCommit(paymentData);
+            purchase.setPos(pos);
+            purchaseRepository.create(purchase);
+            commerce.addPurchase(purchase);
+            commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate());
+
+            // Notifico pago OK
+            publisherEventPurchase.publishNotifyOkPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 1);
+        } catch (Exception e) {
+            // Notifico pago ERROR
+            publisherEventPurchase.publishNotifyFailPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
+            throw e;
         }
-
-        PaymentCommit(paymentData);
-
-        purchase.setPos(pos);
-        purchaseRepository.create(purchase);
-        commerce.addPurchase(purchase);
-        commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate());
     }
 
     private void notifyPayment(long rut_commerce, float amount, int status) {
@@ -132,11 +142,15 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(paymentData, MediaType.APPLICATION_JSON));
 
-        if (response.getStatus() == 200) {
-            System.out.println("Respuesta backend PaymentMethod: " + response.readEntity(String.class));
+        int status = response.getStatus();
+        String responseBody = response.readEntity(String.class);
+
+        if (status == 200) {
+            //Pago ok
+        } else if (status == 402) { // Fondos insuficientes
+            throw new PaymentException("Fondos insuficientes: " + responseBody);
         } else {
-            String errorMsg = response.readEntity(String.class);
-            System.err.println("Error al procesar medio de pago: " + errorMsg);
+            throw new PaymentException("Error al procesar medio de pago (código " + status + "): " + responseBody);
         }
 
         response.close();

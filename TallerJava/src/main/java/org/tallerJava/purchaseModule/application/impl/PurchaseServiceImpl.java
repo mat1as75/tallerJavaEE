@@ -20,6 +20,7 @@ import org.tallerJava.purchaseModule.domain.PurchasePos;
 import org.tallerJava.purchaseModule.domain.repo.CommerceRepository;
 import org.tallerJava.purchaseModule.domain.repo.PosRepository;
 import org.tallerJava.purchaseModule.domain.repo.PurchaseRepository;
+import org.tallerJava.purchaseModule.interfase.event.out.PublisherEventPurchase;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -35,6 +36,8 @@ public class PurchaseServiceImpl implements PurchaseService {
     private CommerceRepository CommerceRepository;
     @Inject
     private PosRepository PosRepository;
+    @Inject
+    private PublisherEventPurchase publisherEventPurchase;
 
     @Override
     @Transactional
@@ -56,6 +59,10 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchaseRepository.create(purchase);
         commerce.addPurchase(purchase);
         commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate());
+    }
+
+    private void notifyPayment(long rut_commerce, float amount, int status) {
+        publisherEventPurchase.publishNotifyPayment(rut_commerce, amount, status);
     }
 
     @Override

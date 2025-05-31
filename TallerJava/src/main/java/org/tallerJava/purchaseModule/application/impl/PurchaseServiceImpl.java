@@ -21,6 +21,7 @@ import org.tallerJava.purchaseModule.domain.repo.CommerceRepository;
 import org.tallerJava.purchaseModule.domain.repo.PosRepository;
 import org.tallerJava.purchaseModule.domain.repo.PurchaseRepository;
 import org.tallerJava.purchaseModule.exceptions.PaymentException;
+import org.tallerJava.purchaseModule.interfase.event.out.PublisherEventPurchase;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -36,35 +37,42 @@ public class PurchaseServiceImpl implements PurchaseService {
     private CommerceRepository CommerceRepository;
     @Inject
     private PosRepository PosRepository;
+    @Inject
+    private PublisherEventPurchase publisherEventPurchase;
 
     @Override
     @Transactional
     public void processPayment(PaymentDataDTO paymentData) {
         try {
+            // Notifico pago
+            publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), -1);
+
             Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
             Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
             long rut = paymentData.getCommerceRut();
             int posId = paymentData.getPosId();
-
             PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
             PurchasePos pos = PosRepository.findById(posId);
             if (!pos.isStatus()) {
                 throw new IllegalStateException("El POS está inactivo o no disponible");
             }
-
             PaymentCommit(paymentData);
-
             purchase.setPos(pos);
             purchaseRepository.create(purchase);
             commerce.addPurchase(purchase);
             commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate());
 
-            //Acá notificaria PagoOK
-
+            // Notifico pago OK
+            publisherEventPurchase.publishNotifyOkPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 1);
         } catch (Exception e) {
-            //Notificar pago Error
+            // Notifico pago ERROR
+            publisherEventPurchase.publishNotifyFailPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
             throw e;
         }
+    }
+
+    private void notifyPayment(long rut_commerce, float amount, int status) {
+        publisherEventPurchase.publishNotifyPayment(rut_commerce, amount, status);
     }
 
     @Override

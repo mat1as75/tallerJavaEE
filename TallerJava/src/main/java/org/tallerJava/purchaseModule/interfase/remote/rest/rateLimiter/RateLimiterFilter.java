@@ -53,10 +53,10 @@ public class RateLimiterFilter implements ContainerRequestFilter {
 
     private Bucket createBucket(int maxRequestsPerMinute) {
         // Creamos un bucket con capacidad máxima igual a maxRequestsPerMinute
-        // y configuramos que se recargue con esa misma cantidad cada minuto
+        // y configuramos que se recargue con esa misma cantidad cada minuto(aprox ya que refillGreedy lo maneja diferente)
         Bandwidth bucketConf = Bandwidth.builder()
                 .capacity(maxRequestsPerMinute)
-                .refillGreedy(maxRequestsPerMinute, Duration.ofMinutes(1)) // Tambien hay opcion refill intervally (distribuye la recarga de los tokens)
+                .refillGreedy(maxRequestsPerMinute, Duration.ofMinutes(1)) // refillGreedy : Reparte los tokens lo antes posible 'ver documentación'
                 .build();
 
         // Construimos y devolvemos el bucket

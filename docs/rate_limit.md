@@ -1,4 +1,4 @@
-## 1 En esta seccion haremos un análisis de un **rate limiter** (limitador de tasa) basado en el patrón *Token Bucket*. 
+## 1. En esta seccion haremos un análisis de un **rate limiter** (limitador de tasa) basado en el patrón *Token Bucket*. 
 Hacemos uso de la libreria pública de bucket4j
 - Bucket4j es una biblioteca Java para limitación de tasa (rate-limiting) que está basada principalmente en el algoritmo de "token bucket", considerado el estándar de facto para la limitación de tasas en la industria de TI.
   ![TockenBucket](ref/tocken_bucket.png)

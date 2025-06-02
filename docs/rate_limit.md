@@ -31,7 +31,7 @@ Se realizaron dos pruebas de carga sobre el endpoint `/procesarpago`.
 ### 📈 Gráfico 1: 600 usuarios - 1 minuto
 ![Gráfico de 600 usuarios](ref/graphic_600_users.png)
 - Se ejecutaron **600 solicitudes POST** distribuidas uniformemente durante 60 segundos.
-- Resultado: **1 único error 429**.
+- Resultado: **1 único error HTTP `429 Too Many Requests`**.
 - Dado que el límite configurado es de 300 tokens/minuto, se esperaban muchos más errores.
 
 💡 **Conclusión parcial:** El rate limiter **comenzó a recargar tokens desde el primer request**, incrementando el total disponible en el minuto.
@@ -42,7 +42,7 @@ Se realizaron dos pruebas de carga sobre el endpoint `/procesarpago`.
 ![Gráfico de 600 usuarios](ref/graphic_900_users.png)
 
 - Se lanzaron **900 solicitudes POST** en el mismo periodo de tiempo.
-- Resultado: Aproximadamente **300 errores 429** (33%).
+- Resultado: Aproximadamente **300 errores HTTP `429 Too Many Requests`** (33%).
 - Esto coincide con una disponibilidad de **600 tokens** (300 iniciales + 5 tokens por segundo durante 60 segundos).
 
 ---
@@ -60,7 +60,7 @@ Este comportamiento se corrobora con lo observado en los logs, donde se registra
 [🔗 Ver Excel del análisis](https://docs.google.com/spreadsheets/d/1_41NKurE2JIR_YbuCYKLkUzTlmcZI6pVo7zFoRcvw0k/edit?usp=sharing)
 
 - Tiempo de primer error detectado: **00:00:34**
-- Total de errores tras 900 solicitudes: **~300**
+- Total de errores tras 900 solicitudes: **~300** HTTP `429 Too Many Requests`
 
 ### 🧮 Cálculo
 

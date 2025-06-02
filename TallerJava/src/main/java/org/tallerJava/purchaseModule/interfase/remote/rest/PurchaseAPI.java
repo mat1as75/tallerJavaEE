@@ -12,6 +12,7 @@ import org.jboss.logging.Logger;
 import org.tallerJava.purchaseModule.application.PurchaseService;
 import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
 import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
+import org.tallerJava.purchaseModule.interfase.remote.rest.rateLimiter.RateLimiter;
 
 @ApplicationScoped
 @Path("/purchase")
@@ -24,6 +25,7 @@ public class PurchaseAPI {
     private PurchaseService purchaseService;
 
     @POST
+    @RateLimiter(maxRequestsPerMinute = 300)
     @Transactional
     public Response processPayment(PaymentDataDTO paymentData) {
         try {

@@ -57,7 +57,11 @@ Cada módulo implementa una funcionalidad específica del negocio y está diseñ
 - Reportes asincrónicos para evitar sobrecarga
 - Almacenamiento eficiente de montos vendidos
 - Seguridad: hash de contraseñas, no guardar datos de tarjeta
-- Rate Limiting con aumento de comisión por abuso
+- Rate Limiter con aumento de comisión por abuso
+
+📊 Puedes ver el análisis completo del rate limiter en el siguiente documento:
+
+[🔗 Ver documento del análisis](/docs/rate_limit.md)
 
 ---
 

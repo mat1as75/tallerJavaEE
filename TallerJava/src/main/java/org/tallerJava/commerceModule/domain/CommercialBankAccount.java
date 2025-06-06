@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "commerce_CommercialBankAccount")
 @Table(name = "commerce_CommercialBankAccount")
 public class  CommercialBankAccount {
 

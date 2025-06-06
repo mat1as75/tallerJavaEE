@@ -6,10 +6,11 @@ import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 import org.tallerJava.commerceModule.domain.Commerce;
+import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Complaint;
 import org.tallerJava.commerceModule.domain.Pos;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
-import org.tallerJava.monitoringModule.interfase.event.in.PurchaseModuleObserver;
+import org.tallerJava.commerceModule.infrastructure.security.identitystore.CredentialValidator;
 
 import java.util.List;
 
@@ -18,6 +19,9 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Inject
+    private CredentialValidator identityStore;
 
     private static final Logger log = Logger.getLogger(CommerceRepositoryImpl.class);
 
@@ -43,6 +47,44 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     @Transactional
+    public Commerce findByEmail(String email) {
+        try {
+            String query = "SELECT c FROM commerce_Commerce c " +
+                    "LEFT JOIN FETCH c.listComplaints " +
+                    "LEFT JOIN FETCH c.listPos " +
+                    "WHERE c.email = :email";
+
+            List<Commerce> commerce = em.createQuery(query, Commerce.class)
+                    .setParameter("email", email)
+                    .getResultList();
+
+            return commerce.isEmpty() ? null : commerce.getFirst();
+        } catch (NoResultException e) {
+            log.info("No se encontró comercio con email: " + email);
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public CommercialBankAccount findByCommercialBankAccount(int accountNumber) {
+        try {
+            String query = "SELECT cba FROM commerce_CommercialBankAccount cba " +
+                    "WHERE cba.accountNumber = :accountNumber";
+
+            List<CommercialBankAccount> commercialBankAccount = em.createQuery(query, CommercialBankAccount.class)
+                    .setParameter("accountNumber", accountNumber)
+                    .getResultList();
+
+            return commercialBankAccount.isEmpty() ? null : commercialBankAccount.getFirst();
+        } catch (NoResultException e) {
+            log.info("No se encontró numero de cuenta con numero: " + accountNumber);
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
     public List<Commerce> findAll() {
         String query1 = "SELECT DISTINCT c FROM commerce_Commerce c LEFT JOIN FETCH c.listPos";
         List<Commerce> commerces = em.createQuery(query1, Commerce.class).getResultList();
@@ -61,9 +103,6 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     public boolean create(Commerce commerce) {
-        if (commerce.getRut() != 0)
-            if (this.findByRut(commerce.getRut()) != null) return false;
-
         try {
             em.persist(commerce);
             return true;

@@ -2,11 +2,42 @@
          xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+
+    <!-- Restricción de seguridad #1 -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Métodos autenticados</web-resource-name>
+            <url-pattern>/commerce/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>commerceRealm</realm-name>
+    </login-config>
+
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <role-name>user</role-name>
+    </security-role>
+
     <servlet>
         <servlet-name>jakarta.ws.rs.core.Application</servlet-name>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>jakarta.ws.rs.core.Application</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <context-param>
+        <param-name>resteasy.role.based.security</param-name>
+        <param-value>true</param-value>
+    </context-param>
 </web-app>

@@ -1,27 +1,43 @@
 
 -- COMMERCE MODULE
+-- CommercialBankAccount
+INSERT INTO commerce_CommercialBankAccount (accountNumber) VALUES (0);
 INSERT INTO commerce_CommercialBankAccount (accountNumber) VALUES (1);
 INSERT INTO commerce_CommercialBankAccount (accountNumber) VALUES (2);
 INSERT INTO commerce_CommercialBankAccount (accountNumber) VALUES (3);
 
-INSERT INTO commerce_Commerce (rut, email, password, account_accountNumber) VALUES (123,"comercio1@mail.com", "pass1", 1);
-INSERT INTO commerce_Commerce (rut, email, password, account_accountNumber) VALUES (456,"comercio2@mail.com", "pass2", 2);
-INSERT INTO commerce_Commerce (rut, email, password, account_accountNumber) VALUES (789,"comercio3@mail.com", "pass3", 3);
+-- Commerce
+INSERT INTO commerce_Commerce (rut, email, password, account_accountNumber) VALUES (0, "admin@mail.com", "cb71cd3f59909532b783257f5f97d0502af258231f9d17cbe762799c0bb4a0f6", 0);
+INSERT INTO commerce_Commerce (rut, email, password, account_accountNumber) VALUES (123,"comercio1@mail.com", "e6c3da5b206634d7f3f3586d747ffdb36b5c675757b380c6a5fe5c570c714349", 1);
+INSERT INTO commerce_Commerce (rut, email, password, account_accountNumber) VALUES (456,"comercio2@mail.com", "1ba3d16e9881959f8c9a9762854f72c6e6321cdd44358a10a4e939033117eab9", 2);
+INSERT INTO commerce_Commerce (rut, email, password, account_accountNumber) VALUES (789,"comercio3@mail.com", "3acb59306ef6e660cf832d1d34c4fba3d88d616f0bb5c2a9e0f82d18ef6fc167", 3);
 
+INSERT INTO `Group` (name) VALUES ("admin");
+INSERT INTO `Group` (name) VALUES ("user");
+
+INSERT INTO commerce_Commerce_Group (commerce_rut, group_name) VALUES (0, "admin"); -- ADMIN DE PRUEBA
+INSERT INTO commerce_Commerce_Group (commerce_rut, group_name) VALUES (123, "user");
+INSERT INTO commerce_Commerce_Group (commerce_rut, group_name) VALUES (456, "user");
+INSERT INTO commerce_Commerce_Group (commerce_rut, group_name) VALUES (789, "user");
+
+-- Pos
 INSERT INTO commerce_Pos (status) VALUES (1);
 INSERT INTO commerce_Pos (status) VALUES (0);
 INSERT INTO commerce_Pos (status) VALUES (1);
 INSERT INTO commerce_Pos (status) VALUES (0);
 
+-- CommercePos
 INSERT INTO commerce_CommercePos (COMMERCE_RUT, POS_ID) VALUES (123, 1);
 INSERT INTO commerce_CommercePos (COMMERCE_RUT, POS_ID) VALUES (456, 4);
 INSERT INTO commerce_CommercePos (COMMERCE_RUT, POS_ID) VALUES (456, 2);
 INSERT INTO commerce_CommercePos (COMMERCE_RUT, POS_ID) VALUES (789, 3);
 
+-- Complaint
 INSERT INTO commerce_Complaint (message) VALUES ("Error en el cobro de varias transacciones hoy.");
 INSERT INTO commerce_Complaint (message) VALUES ("El sistema estuvo caído por más de 1 hora.");
 INSERT INTO commerce_Complaint (message) VALUES ("Stock desactualizado en la plataforma de ventas.");
 
+-- CommerceComplaint
 INSERT INTO commerce_CommerceComplaint (COMMERCE_RUT, COMPLAINT_ID) VALUES (123, 1);
 INSERT INTO commerce_CommerceComplaint (COMMERCE_RUT, COMPLAINT_ID) VALUES (123, 2);
 INSERT INTO commerce_CommerceComplaint (COMMERCE_RUT, COMPLAINT_ID) VALUES (456, 3);

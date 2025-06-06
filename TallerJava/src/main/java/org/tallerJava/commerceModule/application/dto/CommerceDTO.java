@@ -8,6 +8,7 @@ import org.tallerJava.commerceModule.domain.Commerce;
 import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Complaint;
 import org.tallerJava.commerceModule.domain.Pos;
+import org.tallerJava.commerceModule.infrastructure.security.identitystore.Group;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,12 +26,15 @@ public class CommerceDTO {
     private Set<PosDTO> listPos;
     @JsonProperty("listComplaints")
     private Set<ComplaintDTO> listComplaint;
+    @JsonProperty("listGroups")
+    private Set<GroupDTO> listGroup;
 
     /* DTO has the responsibility of building its corresponding business object */
     public Commerce buildCommerce() {
         CommercialBankAccount account = null;
         Set<Pos> listPos = null;
         Set<Complaint> listComplaint = null;
+        Set<Group> listGroup = null;
 
         if (this.account != null) {
             account = this.account.buildCommercialBankAccount();
@@ -48,6 +52,12 @@ public class CommerceDTO {
                     .collect(Collectors.toSet());
         }
 
-        return new Commerce(rut, email, password, account, listPos, listComplaint);
+        if (this.listGroup != null) {
+            listGroup = this.listGroup.stream()
+                    .map(GroupDTO::buildGroup)
+                    .collect(Collectors.toSet());
+        }
+
+        return new Commerce(rut, email, password, account, listPos, listComplaint, listGroup);
     }
 }

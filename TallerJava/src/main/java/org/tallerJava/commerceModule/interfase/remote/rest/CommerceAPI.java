@@ -1,5 +1,7 @@
 package org.tallerJava.commerceModule.interfase.remote.rest;
 
+import jakarta.annotation.security.DenyAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -15,6 +17,7 @@ import org.tallerJava.commerceModule.application.dto.PosDTO;
 import java.util.List;
 
 @ApplicationScoped
+@DenyAll // Por seguridad no permito ejecutar nada sin permisos de admin o user
 @Path( "/commerce")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -27,6 +30,7 @@ public class CommerceAPI {
     @GET
     @Path("/{rut}")
     @Transactional
+    @RolesAllowed("admin")
     public Response findByRut(@PathParam("rut") long rut) {
         log.infof("Obteniendo Comercio con Rut: %d", rut);
 
@@ -42,6 +46,7 @@ public class CommerceAPI {
     @GET
     @Path("/all")
     @Transactional
+    @RolesAllowed("admin")
     public Response findAll() {
         log.infof("Obteniendo todos los Comercios");
         List<Commerce> commerceList = commerceService.getAll();
@@ -50,6 +55,7 @@ public class CommerceAPI {
 
     @POST
     @Transactional
+    @RolesAllowed("admin")
     public Response createCommerce(CommerceDTO commerceDTO) {
         log.infof("Creando Comercio: ", commerceDTO);
 
@@ -58,13 +64,14 @@ public class CommerceAPI {
         if (commerceService.create(commerce)) {
             return Response.status(Response.Status.CREATED).entity(commerce).build();
         } else {
-            log.error("Comercio ya existente con Rut: " + commerceDTO.getRut());
+            log.error("Comercio ya existente con Rut: " + commerceDTO.getRut() + " o Email: " + commerceDTO.getEmail());
             return Response.status(Response.Status.CONFLICT).build();
         }
     }
 
     @PUT
     @Transactional
+    @RolesAllowed("user")
     public Response updateCommerce(CommerceDTO commerceDTO) {
         log.infof("Actualizando Comercio: %s", commerceDTO);
 
@@ -80,6 +87,7 @@ public class CommerceAPI {
 
     @PATCH
     @Transactional
+    @RolesAllowed("user")
     public Response updateCommercePassword(CommerceDTO commerceDTO) {
         log.infof("Actualizando Contraseña de Comercio: ", commerceDTO);
 
@@ -96,6 +104,7 @@ public class CommerceAPI {
     @DELETE
     @Path("/{rut}")
     @Transactional
+    @RolesAllowed("admin")
     public Response deleteCommerce(@PathParam("rut") long rut) {
         log.infof("Eliminando Comercio con Rut: %d", rut);
 
@@ -110,6 +119,7 @@ public class CommerceAPI {
     @POST
     @Path("/{rut}/pos")
     @Transactional
+    @RolesAllowed("admin")
     public Response createPos(@PathParam("rut") long rut, PosDTO posDTO) {
         log.infof("Creando Pos con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);
@@ -121,9 +131,13 @@ public class CommerceAPI {
         }
     }
 
+    /* curl --user 123:pass1 -X POST -v http://localhost:8080/TallerJava/commerce/123/makeComplaint \
+            -H "Content-Type: application/json" \
+            -d '{"message": "Mensaje Enojado"}'  */
     @POST
     @Path("/{rut}/makeComplaint")
     @Transactional
+    @RolesAllowed("user")
     public Response makeComplaint(@PathParam("rut") long rut, ComplaintDTO complaintDTO) {
         log.infof("Haciendo Reclamo con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);
@@ -138,6 +152,7 @@ public class CommerceAPI {
     @PATCH
     @Path("/{rut}/changePosStatus")
     @Transactional
+    @RolesAllowed("admin")
     public Response changePosStatus(@PathParam("rut") long rut, PosDTO posDTO) {
         log.infof("Cambiando Estado de Pos con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);

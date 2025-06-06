@@ -1,12 +1,15 @@
 package org.tallerJava.commerceModule.domain.repo;
 
 import org.tallerJava.commerceModule.domain.Commerce;
+import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Pos;
 
 import java.util.List;
 
 public interface CommerceRepository {
     public Commerce findByRut(long rut);
+    public Commerce findByEmail(String email);
+    public CommercialBankAccount findByCommercialBankAccount(int accountNumber);
     public List<Commerce> findAll();
     public boolean create(Commerce commerce);
     public boolean update(Commerce commerce);

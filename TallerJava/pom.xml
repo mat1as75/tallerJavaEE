@@ -170,15 +170,46 @@
                 <configuration>
                     <version>${wildfly.version}</version>
                     <server-config>standalone-full.xml</server-config>
-                    <add-user>
-                        <users>
-                            <user>
-                                <username>root</username>
-                                <password>1234</password>
-                                <application-user>false</application-user>
-                            </user>
-                        </users>
-                    </add-user>
+
+                    <commands>
+                        <command>/subsystem=undertow/application-security-domain=other:write-attribute(name=integrated-jaspi,value=false)</command>
+                        <command>reload</command>
+                    </commands>
+<!--                    <add-user>-->
+<!--                        <users>-->
+<!--                            <user>-->
+<!--                                <username>root</username>-->
+<!--                                <password>1234</password>-->
+<!--                                <application-user>false</application-user>-->
+<!--                            </user>-->
+
+<!--                            &lt;!&ndash; Preloaded Commerce Users in DB &ndash;&gt;-->
+<!--                            <user>-->
+<!--                                <username>commercio1@mail.com</username>-->
+<!--                                <password>pass1</password>-->
+<!--                                <groups>-->
+<!--                                    <group>commerce</group>-->
+<!--                                </groups>-->
+<!--                                <application-user>true</application-user>-->
+<!--                            </user>-->
+<!--                            <user>-->
+<!--                                <username>commercio2@mail.com</username>-->
+<!--                                <password>pass2</password>-->
+<!--                                <groups>-->
+<!--                                    <group>commerce</group>-->
+<!--                                </groups>-->
+<!--                                <application-user>true</application-user>-->
+<!--                            </user>-->
+<!--                            <user>-->
+<!--                                <username>commercio3@mail.com</username>-->
+<!--                                <password>pass4</password>-->
+<!--                                <groups>-->
+<!--                                    <group>commerce</group>-->
+<!--                                </groups>-->
+<!--                                <application-user>true</application-user>-->
+<!--                            </user>-->
+<!--                        </users>-->
+<!--                    </add-user>-->
                     <scripts>
                         <!-- ver archivo config.cli que está en ./ -->
                         <script>config.cli</script>

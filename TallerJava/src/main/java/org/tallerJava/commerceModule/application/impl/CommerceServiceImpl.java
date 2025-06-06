@@ -5,8 +5,11 @@ import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
 import org.tallerJava.commerceModule.application.CommerceService;
 import org.tallerJava.commerceModule.domain.Commerce;
+import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Pos;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
+import org.tallerJava.commerceModule.infrastructure.security.HashFunctionUtil;
+import org.tallerJava.commerceModule.infrastructure.security.identitystore.Group;
 import org.tallerJava.commerceModule.interfase.event.out.PublisherEventCommerce;
 
 import java.util.ArrayList;
@@ -23,12 +26,38 @@ public class CommerceServiceImpl implements CommerceService {
     private PublisherEventCommerce publisherEventCommerce;
 
     @Override
-    public boolean create(Commerce commerce) {
-        notifyNewCommerce(commerce);
-        List<Pos> listPos = new ArrayList<>(commerce.getListPos());
+    public Commerce getByRut(long rut) {
+        return commerceRepository.findByRut(rut);
+    }
 
-        // Si contiene algun Pos
-        if (!listPos.isEmpty()) {
+    @Override
+    public Commerce getByEmail(String email) {
+        return commerceRepository.findByEmail(email);
+    }
+
+    @Override
+    public CommercialBankAccount getByCommercialBankAccount(int accountNumber) {
+        return commerceRepository.findByCommercialBankAccount(accountNumber);
+    }
+
+    @Override
+    public List<Commerce> getAll() {
+        return commerceRepository.findAll();
+    }
+
+    @Override
+    public boolean create(Commerce commerce) {
+        if (this.getByRut(commerce.getRut()) != null) return false;
+        if (this.getByEmail(commerce.getEmail()) != null) return false;
+        if (this.getByCommercialBankAccount(commerce.getAccount().getAccountNumber()) != null) return false;
+
+        notifyNewCommerce(commerce);
+
+        String passwordHash = HashFunctionUtil.convertToHas(commerce.getPassword());
+        commerce.setPassword(passwordHash);
+
+        List<Pos> listPos = new ArrayList<>(commerce.getListPos());
+        if (!listPos.isEmpty()) { // Si contiene algún Pos
             // Notifico un nuevo Pos
             notifyNewPos(commerce.getRut(), listPos.getFirst());
         }
@@ -90,16 +119,6 @@ public class CommerceServiceImpl implements CommerceService {
 
     private void notifyChangePosStatus(long rut_commerce, int id_pos, boolean newStatus) {
         publisherEventCommerce.publishChangePosStatus(rut_commerce, id_pos, newStatus);
-    }
-
-    @Override
-    public Commerce getByRut(long rut) {
-        return commerceRepository.findByRut(rut);
-    }
-
-    @Override
-    public List<Commerce> getAll() {
-        return commerceRepository.findAll();
     }
 
 }

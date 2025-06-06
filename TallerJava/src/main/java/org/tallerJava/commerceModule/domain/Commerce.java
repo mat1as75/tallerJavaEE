@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.tallerJava.commerceModule.domain.CommercialBankAccount;
+import org.tallerJava.commerceModule.infrastructure.security.HashFunctionUtil;
+import org.tallerJava.commerceModule.infrastructure.security.identitystore.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +36,37 @@ public class Commerce {
     inverseJoinColumns = @JoinColumn(name="COMPLAINT_ID"))
     private Set<Complaint> listComplaints;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "commerce_Commerce_Group",
+    joinColumns = @JoinColumn(name = "commerce_rut"),
+    inverseJoinColumns = @JoinColumn(name = "group_name"))
+    private Set<Group> listGroups;
+
     public Commerce() {}
 
-    public Commerce(long rut, String email, String password, CommercialBankAccount account, Set<Pos> listPos, Set<Complaint> listComplaints){
+    public Commerce(long rut, String email, String password, CommercialBankAccount account, Set<Pos> listPos, Set<Complaint> listComplaints, Set<Group> listGroup){
         this.rut = rut;
         this.email = email;
         this.password = password;
         this.account = account;
         this.listPos = listPos;
         this.listComplaints = listComplaints;
+        this.listGroups = listGroup;
+    }
+
+    public List<String> groupsAsString() {
+        List<String> groupList = new ArrayList<>();
+        if (this.listGroups != null) {
+            for (Group g : this.listGroups) {
+                groupList.add(g.getName());
+            }
+        }
+
+        return groupList;
+    }
+
+    public boolean correctPassword(String password) {
+        return HashFunctionUtil.convertToHas(password).equals(this.password);
     }
 
 

@@ -52,6 +52,7 @@ public class HashFunctionUtil {
         System.out.println("Ejemplo de hash de contraseña \n ");
 
         List<String> passwords = new ArrayList<String>();
+        passwords.add("pass0");
         passwords.add("pass1");
         passwords.add("pass2");
         passwords.add("pass3");

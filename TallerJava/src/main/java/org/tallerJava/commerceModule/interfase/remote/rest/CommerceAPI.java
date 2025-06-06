@@ -46,7 +46,7 @@ public class CommerceAPI {
     @GET
     @Path("/all")
     @Transactional
-    //@RolesAllowed("admin")
+    @RolesAllowed("admin")
     public Response findAll() {
         log.infof("Obteniendo todos los Comercios");
         List<Commerce> commerceList = commerceService.getAll();

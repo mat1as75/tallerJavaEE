@@ -58,3 +58,11 @@ INSERT INTO purchase_Pos (id, status) VALUES (4, 0);
 INSERT INTO Purchase (id, amount, commerce_rut, pos_id, date, description) VALUES (1, 1500.00, 123, 1, '2025-05-20 10:33:55.683000', 'Compra realizada desde POS 1');
 INSERT INTO Purchase (id, amount, commerce_rut, pos_id, date, description) VALUES (2, 3000.50, 456, 2, '2025-05-21 12:11:20.123000', 'Compra online desde POS 2');
 INSERT INTO Purchase (id, amount, commerce_rut, pos_id, date, description) VALUES (3, 8275.75, 789, 3, '2025-05-20 14:45:33.456000', 'Compra presencial desde POS 3');
+
+-- TRANSFER MODULE
+-- transfer_Deposit
+INSERT INTO transfer_Deposit (id, commerceRut, amount, accountNumber, creation_date) VALUES (1, 123, 1500.00, 1, '2025-05-23 10:33:55.683000');
+INSERT INTO transfer_Deposit (id, commerceRut, amount, accountNumber, creation_date) VALUES (2, 123, 1600.00, 1, '2025-05-24 10:33:55.683000');
+INSERT INTO transfer_Deposit (id, commerceRut, amount, accountNumber, creation_date) VALUES (3, 123, 1700.00, 1, '2025-05-25 10:33:55.683000');
+INSERT INTO transfer_Deposit (id, commerceRut, amount, accountNumber, creation_date) VALUES (4, 456, 3000.50, 2, '2025-05-24 10:33:55.683000');
+INSERT INTO transfer_Deposit (id, commerceRut, amount, accountNumber, creation_date) VALUES (5, 789, 8275.75, 3, '2025-05-22 10:33:55.683000');

@@ -31,7 +31,7 @@ public class TransferServiceImpl implements TransferService {
     private static final int PROFIT_PERCENTAGE = 10;
 
     // Atributo para calcular beneficio del Sistema
-    private float profitAmount = 1607.625f;
+    private float profitAmount = 0;
 
     @Override
     @Transactional

@@ -36,7 +36,7 @@ public class CommerceServiceImpl implements CommerceService {
     }
 
     @Override
-    public CommercialBankAccount getByCommercialBankAccount(int accountNumber) {
+    public CommercialBankAccount getByCommercialBankAccount(String accountNumber) {
         return commerceRepository.findByCommercialBankAccount(accountNumber);
     }
 

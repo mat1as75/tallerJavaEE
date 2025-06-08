@@ -30,7 +30,7 @@ public class PublisherEventCommerce {
     private Event<CommerceNewPos> changePosStatusEvent;
 
     private CommerceNewCommerce buildCommerceNewCommerceEvent(Commerce commerce) {
-        int accountNumber = commerce.getAccount().getAccountNumber();
+        String accountNumber = commerce.getAccount().getAccountNumber();
 
         Map<Integer, Boolean> mapPos = commerce.getListPos().stream()
                 .map(pos -> new CommercePos(pos.getId(), pos.isStatus()))

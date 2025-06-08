@@ -34,3 +34,10 @@ connect
         echo "Ya estaba desplegado ../PaymentMethod/target/PaymentMethod-1.0-SNAPSHOT.war"
     end-try
 
+    try
+        deploy --force ../bancoclientemock/target/BancoClienteMock-1.0-SNAPSHOT.war
+        echo "Se despliega ../bancoclientemock/target/BancoClienteMock-1.0-SNAPSHOT.war"
+    catch
+        echo "Ya estaba desplegado ../bancoclientemock/target/BancoClienteMock-1.0-SNAPSHOT.war"
+    end-try
+

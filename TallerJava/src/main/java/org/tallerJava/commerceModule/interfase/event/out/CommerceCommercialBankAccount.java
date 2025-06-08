@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CommerceCommercialBankAccount {
-    private int accountNumber;
+    private String accountNumber;
 }

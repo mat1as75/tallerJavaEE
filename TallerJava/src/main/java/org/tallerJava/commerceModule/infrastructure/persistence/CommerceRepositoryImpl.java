@@ -67,7 +67,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
 
     @Override
     @Transactional
-    public CommercialBankAccount findByCommercialBankAccount(int accountNumber) {
+    public CommercialBankAccount findByCommercialBankAccount(String accountNumber) {
         try {
             String query = "SELECT cba FROM commerce_CommercialBankAccount cba " +
                     "WHERE cba.accountNumber = :accountNumber";

@@ -38,13 +38,13 @@ public class TransferServiceImpl implements TransferService {
     public void transferDeposit(long commerceRut, String accountNumber, float amount) {
         // Descontado del importe la comisión del Sistema
         this.profitAmount += (amount * PROFIT_PERCENTAGE) / 100;
+        amount = amount - (amount * PROFIT_PERCENTAGE) / 100;
 
         // Notifico transferencia a MOCK Banco Cliente (Soy Cliente SOAP)
-        Deposit deposit = this.makeDeposit(commerceRut, accountNumber, amount);
-        if (deposit == null) {
-            log.errorf("Error al comunicarse con el Banco Cliente para realizar la transferencia: %s", accountNumber);
-            return;
-        }
+        this.makeDeposit(commerceRut, accountNumber, amount);
+
+        LocalDateTime now = LocalDateTime.now();
+        Deposit deposit = new Deposit(commerceRut, amount, accountNumber, now);
 
         // Persisto depósito en base de datos
         try {
@@ -56,21 +56,16 @@ public class TransferServiceImpl implements TransferService {
 
     }
 
-    private Deposit makeDeposit(long commerceRut, String accountNumber, float amount) {
+    private void makeDeposit(long commerceRut, String accountNumber, float amount) {
         log.infof("Realizando transferencia a cuenta %s en comercio %d", accountNumber, commerceRut);
-        amount = amount - (amount * PROFIT_PERCENTAGE) / 100;
-        LocalDateTime now = LocalDateTime.now();
 
-        Deposit deposit = new Deposit(commerceRut, amount, accountNumber, now);
         SoapDepositClient soapDepositClient = new SoapDepositClient();
 
         try {
             DepositResponse res = soapDepositClient.makeDeposit(accountNumber, (int) amount);
             log.infof("[SOAP RESPONSE] STATUS - " + res.isSuccess() + " | ID - " + res.getDepositId() + " | MSG - " + res.getMessage() );
-            return deposit;
         } catch (Exception e) {
-            log.errorf("Error al realizar transferencia a cuenta %s en comercio %d", accountNumber, commerceRut);
-            return null;
+            log.errorf("Error al comunicarse con el Banco Cliente para realizar la transferencia: %s %d ", accountNumber, commerceRut);
         }
     }
 

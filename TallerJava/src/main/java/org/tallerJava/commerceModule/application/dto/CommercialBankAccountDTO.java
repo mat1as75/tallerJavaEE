@@ -9,7 +9,7 @@ import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommercialBankAccountDTO {
-    private int accountNumber;
+    private String accountNumber;
 
     /* DTO has the responsibility of building its corresponding business object */
     public CommercialBankAccount buildCommercialBankAccount() {

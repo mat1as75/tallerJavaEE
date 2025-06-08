@@ -9,7 +9,7 @@ import java.util.List;
 public interface CommerceRepository {
     public Commerce findByRut(long rut);
     public Commerce findByEmail(String email);
-    public CommercialBankAccount findByCommercialBankAccount(int accountNumber);
+    public CommercialBankAccount findByCommercialBankAccount(String accountNumber);
     public List<Commerce> findAll();
     public boolean create(Commerce commerce);
     public boolean update(Commerce commerce);

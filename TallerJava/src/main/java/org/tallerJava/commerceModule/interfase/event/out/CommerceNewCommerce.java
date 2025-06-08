@@ -13,7 +13,7 @@ public class CommerceNewCommerce {
     private long rut;
     private String email;
     private String password;
-    private int accountNumber;
+    private String accountNumber;
     private Map<Integer, Boolean> mapPos;
     private Map<Integer, String> mapComplaint;
 }

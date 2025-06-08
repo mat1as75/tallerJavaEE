@@ -13,9 +13,9 @@ import lombok.Setter;
 public class  CommercialBankAccount {
 
     @Id
-    private int accountNumber;
+    private String accountNumber;
 
-    public CommercialBankAccount(int accountNumber){
+    public CommercialBankAccount(String accountNumber){
         this.accountNumber = accountNumber;
     }
 

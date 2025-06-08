@@ -5,7 +5,7 @@ import org.tallerJava.transferModule.domain.DateRange;
 import java.util.List;
 
 public interface TransferService {
-    //public void transferDeposit(String accountNumber, float amount);
+    public void transferDeposit(long commerceRut, String accountNumber, float amount);
 
     public List<DepositDTO> getDepositsSummaryByPeriod(long commerceRut, DateRange range);
 }

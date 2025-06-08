@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface TransferRepository {
     public List<Deposit> findByPeriod(long commerceRut, LocalDateTime start, LocalDateTime end);
+    public void createDeposit(Deposit deposit);
 }

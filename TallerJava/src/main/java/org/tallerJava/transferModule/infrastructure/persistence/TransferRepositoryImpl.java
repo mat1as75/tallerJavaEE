@@ -1,10 +1,7 @@
 package org.tallerJava.transferModule.infrastructure.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
 import org.tallerJava.transferModule.domain.Deposit;
@@ -36,6 +33,16 @@ public class TransferRepositoryImpl implements TransferRepository {
         } catch (Exception e) {
             log.error("Error inesperado buscando depósitos");
             throw new RuntimeException("Error buscando depósitos para el comercio dado y rango de fechas", e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void createDeposit(Deposit deposit) {
+        try {
+            em.persist(deposit);
+        } catch (PersistenceException e) {
+            throw e;
         }
     }
 }

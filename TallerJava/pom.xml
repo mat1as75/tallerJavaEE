@@ -20,7 +20,7 @@
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
         <war-plugin.version>3.4.0</war-plugin.version>
         <wildfly-plugin.version>5.0.1.Final</wildfly-plugin.version>
-
+        <jaxws.version>3.0.2</jaxws.version>
         <junit.version>5.8.2</junit.version>
         <mockito.verson>4.5.1</mockito.verson>
         <weld.version>5.1.0.Final</weld.version>
@@ -144,6 +144,17 @@
             <version>8.10.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>${jaxws.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

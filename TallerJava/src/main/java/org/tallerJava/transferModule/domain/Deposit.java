@@ -16,13 +16,13 @@ public class Deposit {
     private long id;
     private long commerceRut;
     private float amount;
-    private int accountNumber;
+    private String accountNumber;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 
     public Deposit() {}
 
-    public Deposit(long commerceRut, float amount, int accountNumber, LocalDateTime creationDate) {
+    public Deposit(long commerceRut, float amount, String accountNumber, LocalDateTime creationDate) {
         this.commerceRut = commerceRut;
         this.amount = amount;
         this.accountNumber = accountNumber;

@@ -16,11 +16,11 @@ public class DepositDTO {
     private long id;
     private long commerceRut;
     private float amount;
-    private int accountNumber;
+    private String accountNumber;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
 
-    public DepositDTO(long id, long commerceRut, float amount, int accountNumber, LocalDateTime creationDate) {
+    public DepositDTO(long id, long commerceRut, float amount, String accountNumber, LocalDateTime creationDate) {
         this.id = id;
         this.commerceRut = commerceRut;
         this.amount = amount;

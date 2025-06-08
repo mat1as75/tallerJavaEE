@@ -28,7 +28,7 @@ public class TransferServiceImpl implements TransferService {
 
 //    @Override
 //    @Transactional
-//    public void transferDeposit(float amount, int accountNumber) {
+//    public void transferDeposit(String accountNumber, float amount) {
 //
 //        // Notifico transferencia a MOCK Banco Cliente (Soy Cliente SOAP)
 ////        try {

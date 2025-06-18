@@ -6,6 +6,8 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.tallerJava.authSharedModule.AuthStatus;
+import org.tallerJava.purchaseModule.application.AuthService;
 import org.tallerJava.purchaseModule.application.PurchaseService;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,13 +41,15 @@ public class PurchaseServiceImpl implements PurchaseService {
     private PosRepository PosRepository;
     @Inject
     private PublisherEventPurchase publisherEventPurchase;
+    @Inject
+    private AuthService authService;
 
     @Override
     @Transactional
     public void processPayment(PaymentDataDTO paymentData) {
         try {
             // Notifico pago
-            publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), -1);
+            //publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), -1);
 
             Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
             Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
@@ -61,7 +65,6 @@ public class PurchaseServiceImpl implements PurchaseService {
             purchaseRepository.create(purchase);
             commerce.addPurchase(purchase);
             commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate());
-
             // Notifico pago OK
             publisherEventPurchase.publishNotifyOkPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 1);
         } catch (Exception e) {
@@ -69,10 +72,6 @@ public class PurchaseServiceImpl implements PurchaseService {
             publisherEventPurchase.publishNotifyFailPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
             throw e;
         }
-    }
-
-    private void notifyPayment(long rut_commerce, float amount, int status) {
-        publisherEventPurchase.publishNotifyPayment(rut_commerce, amount, status);
     }
 
     @Override
@@ -87,6 +86,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         List<Purchase> todayPurchases = purchaseRepository.findPurchasesByCommerceRutAndDateBetween(commerce, startDay, endDay); // paso commerce para optimizar consulta usando cache hibernate
 
+        this.publisherEventPurchase.publishNotifySalesReport(rut);
         return SalesSummaryDTO.from(todayPurchases);
     }
 
@@ -104,6 +104,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         List<Purchase> purchases = purchaseRepository.findPurchasesByCommerceRutAndDateBetween(commerce, startToDate, endToDate);
 
+        this.publisherEventPurchase.publishNotifySalesReport(rut);
         return SalesSummaryDTO.from(purchases);
     }
 
@@ -155,6 +156,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
         response.close();
         client.close();
+    }
+
+    @Override
+    public AuthStatus isCommerceAuthorized(long commerce_rut, String password) {
+        return authService.authenticate(commerce_rut, password).getStatus();
     }
 
 }

@@ -13,6 +13,7 @@ import org.tallerJava.transferModule.domain.Deposit;
 import org.tallerJava.transferModule.domain.repo.TransferRepository;
 import org.tallerJava.transferModule.infrastructure.remote.soap.SoapDepositClient;
 import org.tallerJava.transferModule.infrastructure.remote.soap.generated.DepositResponse;
+import org.tallerJava.transferModule.interfase.event.out.PublisherEventTransfer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +28,8 @@ public class TransferServiceImpl implements TransferService {
 
     @Inject
     private TransferRepository transferRepository;
+    @Inject
+    private PublisherEventTransfer publisherEventTransfer;
 
     private static final int PROFIT_PERCENTAGE = 10;
 
@@ -50,6 +53,8 @@ public class TransferServiceImpl implements TransferService {
         try {
             transferRepository.createDeposit(deposit);
             log.infof("Actualizando beneficio del Sistema: %s", this.profitAmount);
+
+            publisherEventTransfer.publishNotifyDeposit(deposit.getCommerceRut(), deposit.getAmount(), deposit.getAccountNumber());
         } catch (PersistenceException e) {
             throw e;
         }

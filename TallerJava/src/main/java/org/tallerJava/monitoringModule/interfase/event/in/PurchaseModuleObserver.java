@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
 import org.tallerJava.monitoringModule.application.MonitoringService;
 import org.tallerJava.monitoringModule.domain.Payment;
+import org.tallerJava.monitoringModule.domain.SalesReport;
 import org.tallerJava.purchaseModule.interfase.event.out.NotifyPayment;
 
 @ApplicationScoped
@@ -14,13 +15,6 @@ public class PurchaseModuleObserver {
 
     @Inject
     private MonitoringService monitoringService;
-
-    public void acceptNotifyPayment(@Observes NotifyPayment event) {
-        log.infof("Se realizo un pago: %s", event);
-        Payment payment = new Payment(event.getRut_commerce(), event.getAmount(), event.getStatus());
-
-        monitoringService.notifyPayment(payment);
-    }
 
     public void acceptNotifyPaymentOk(@Observes NotifyPayment event) {
         log.infof("Se realizo un pago exitoso: %s", event);
@@ -34,5 +28,12 @@ public class PurchaseModuleObserver {
         Payment payment = new Payment(event.getRut_commerce(), event.getAmount(), event.getStatus());
 
         monitoringService.notifyPaymentFail(payment);
+    }
+
+    public void acceptNotifySalesReport(@Observes NotifyPayment event) {
+        log.infof("Se realizo un reporte de ventas: %s", event);
+        SalesReport salesReport = new SalesReport(event.getRut_commerce());
+
+        monitoringService.notifySalesReport(salesReport);
     }
 }

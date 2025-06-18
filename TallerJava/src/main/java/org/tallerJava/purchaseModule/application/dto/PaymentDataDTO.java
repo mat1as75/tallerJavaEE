@@ -15,6 +15,7 @@ public class PaymentDataDTO {
     private int posId;
     private CardDataDTO cardData;
     private long commerceRut;
+    private String password;
 
     public static Purchase buildPurchase(PaymentDataDTO dto_purchase) {
         Purchase purchase = new Purchase();

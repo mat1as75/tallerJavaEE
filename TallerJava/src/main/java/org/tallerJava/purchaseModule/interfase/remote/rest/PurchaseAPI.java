@@ -9,6 +9,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
+import org.tallerJava.authSharedModule.AuthStatus;
 import org.tallerJava.purchaseModule.application.PurchaseService;
 import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
 import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
@@ -28,6 +29,19 @@ public class PurchaseAPI {
     @RateLimiter(maxRequestsPerMinute = 300)
     @Transactional
     public Response processPayment(PaymentDataDTO paymentData) {
+        AuthStatus authStatus = purchaseService.isCommerceAuthorized(paymentData.getCommerceRut(), paymentData.getPassword());
+        System.out.println("STATUS PROCESS PAYMENT: %s" + authStatus);
+        if (authStatus.equals(AuthStatus.NOT_AUTH)) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("No se pudo autenticar el comercio")
+                    .build();
+        }
+        if (authStatus.equals(AuthStatus.NOT_EXISTS)) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("El comercio no existe")
+                    .build();
+        }
+
         try {
             purchaseService.processPayment(paymentData);
             return Response.ok("Pago procesado exitosamente").build();

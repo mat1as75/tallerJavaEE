@@ -1,35 +1,61 @@
 package org.tallerJava.monitoringModule.application.impl;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.tallerJava.monitoringModule.application.MonitoringService;
 import org.tallerJava.monitoringModule.domain.Complaint;
+import org.tallerJava.monitoringModule.domain.Deposit;
 import org.tallerJava.monitoringModule.domain.Payment;
+import org.tallerJava.monitoringModule.domain.SalesReport;
+import org.tallerJava.monitoringModule.infrastructure.MetricsRegister;
 
 @ApplicationScoped
 public class MonitoringServiceImpl implements MonitoringService {
-
-    @Override
-    public void notifyPayment(Payment payment) {
-        System.out.println("Evento Pago Recibido");
-    }
+    @Inject
+    private MetricsRegister metricsRegister;
 
     @Override
     public void notifyPaymentOk(Payment payment) {
-        System.out.println("Evento Pago Aprobado Recibido");
+        try {
+            metricsRegister.counterIncrement(MetricsRegister.METRIC_PAYMENT_OK);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
     public void notifyPaymentFail(Payment payment) {
-        System.out.println("Evento Pago Fallido Recibido");
+        try {
+            metricsRegister.counterIncrement(MetricsRegister.METRIC_PAYMENT_FAIL);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
-    public void notifyTransfer() {
-        System.out.println("Evento Transferencia Recibido");
+    public void notifySalesReport(SalesReport salesReport) {
+        try {
+            metricsRegister.counterIncrement(MetricsRegister.METRIC_SALES_REPORT);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public void notifyTransfer(Deposit deposit) {
+        try {
+            metricsRegister.counterIncrement(MetricsRegister.METRIC_DEPOSIT);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
     public void makeComplaint(Complaint complaint) {
-        System.out.println("Evento Reclamo Recibido: " + complaint.getMessage());
+        try {
+            metricsRegister.counterIncrement(MetricsRegister.METRIC_COMPLAINT);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

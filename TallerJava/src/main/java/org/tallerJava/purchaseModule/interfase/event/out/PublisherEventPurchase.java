@@ -16,6 +16,10 @@ public class PublisherEventPurchase {
     @Inject
     private Event<NotifyPayment> notifyPaymentFailEvent;
 
+    @Inject
+    private Event<NotifySalesReport> notifySalesReportEvent;
+
+
     private NotifyPayment buildNotifyPaymentEvent(long rut_commerce, float amount, int status) {
         return new NotifyPayment(rut_commerce, amount, status);
     }
@@ -44,6 +48,16 @@ public class PublisherEventPurchase {
         NotifyPayment event = buildNotifyPaymentFailEvent(rut_commerce, amount, status);
 
         notifyPaymentFailEvent.fire(event);
+    }
+
+    private NotifySalesReport buildNotifySalesReportEvent(long rut_commerce) {
+        return new NotifySalesReport(rut_commerce);
+    }
+
+    public void publishNotifySalesReport(long rut_commerce) {
+        NotifySalesReport event = buildNotifySalesReportEvent(rut_commerce);
+
+        notifySalesReportEvent.fire(event);
     }
 
 }

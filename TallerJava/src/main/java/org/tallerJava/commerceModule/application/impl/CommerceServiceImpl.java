@@ -9,7 +9,6 @@ import org.tallerJava.commerceModule.domain.CommercialBankAccount;
 import org.tallerJava.commerceModule.domain.Pos;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
 import org.tallerJava.commerceModule.infrastructure.security.HashFunctionUtil;
-import org.tallerJava.commerceModule.infrastructure.security.identitystore.Group;
 import org.tallerJava.commerceModule.interfase.event.out.PublisherEventCommerce;
 
 import java.util.ArrayList;
@@ -80,7 +79,9 @@ public class CommerceServiceImpl implements CommerceService {
 
     @Override
     public boolean updatePassword(long rut, String newPass) {
-        notifyUpdatePasswordCommerce(rut, newPass);
+        String passwordHash = HashFunctionUtil.convertToHas(newPass);
+
+        notifyUpdatePasswordCommerce(rut, passwordHash);
         return commerceRepository.updatePassword(rut, newPass);
     }
 
@@ -120,5 +121,4 @@ public class CommerceServiceImpl implements CommerceService {
     private void notifyChangePosStatus(long rut_commerce, int id_pos, boolean newStatus) {
         publisherEventCommerce.publishChangePosStatus(rut_commerce, id_pos, newStatus);
     }
-
 }

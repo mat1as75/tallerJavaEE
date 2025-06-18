@@ -14,6 +14,8 @@ import org.tallerJava.commerceModule.domain.Commerce;
 import org.tallerJava.commerceModule.application.dto.CommerceDTO;
 import org.tallerJava.commerceModule.application.dto.ComplaintDTO;
 import org.tallerJava.commerceModule.application.dto.PosDTO;
+import org.tallerJava.commerceModule.interfase.event.out.PublisherEventCommerce;
+
 import java.util.List;
 
 @ApplicationScoped
@@ -26,6 +28,8 @@ public class CommerceAPI {
 
     @Inject
     private CommerceService commerceService;
+    @Inject
+    private PublisherEventCommerce publisherEventCommerce;
 
     @GET
     @Path("/{rut}")
@@ -141,7 +145,9 @@ public class CommerceAPI {
     public Response makeComplaint(@PathParam("rut") long rut, ComplaintDTO complaintDTO) {
         log.infof("Haciendo Reclamo con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);
+
         if (commerceService.createComplaint(rut, complaintDTO.getMessage())) {
+            publisherEventCommerce.makeCommerceComplaint(rut, complaintDTO.getMessage());
             return Response.ok(commerce).build();
         } else {
             log.error("Comercio no encontrado con Rut: " + rut);

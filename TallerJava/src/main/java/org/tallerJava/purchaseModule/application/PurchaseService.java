@@ -1,8 +1,7 @@
 package org.tallerJava.purchaseModule.application;
 
+import org.tallerJava.authSharedModule.AuthStatus;
 import org.tallerJava.purchaseModule.application.dto.PaymentDataDTO;
-import org.tallerJava.purchaseModule.domain.Card;
-import org.tallerJava.purchaseModule.domain.Purchase;
 import org.tallerJava.purchaseModule.application.dto.SalesSummaryDTO;
 import org.tallerJava.purchaseModule.domain.PurchaseCommerce;
 import org.tallerJava.purchaseModule.domain.PurchasePos;
@@ -21,4 +20,6 @@ public interface PurchaseService {
     public boolean createPos(PurchasePos pos);
 
     public int changePosStatus(PurchasePos pos);
+
+    public AuthStatus isCommerceAuthorized(long commerce_rut, String password);
 }

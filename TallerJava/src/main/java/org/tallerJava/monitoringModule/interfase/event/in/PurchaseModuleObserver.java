@@ -8,6 +8,7 @@ import org.tallerJava.monitoringModule.application.MonitoringService;
 import org.tallerJava.monitoringModule.domain.Payment;
 import org.tallerJava.monitoringModule.domain.SalesReport;
 import org.tallerJava.purchaseModule.interfase.event.out.NotifyPayment;
+import org.tallerJava.purchaseModule.interfase.event.out.NotifySalesReport;
 
 @ApplicationScoped
 public class PurchaseModuleObserver {
@@ -16,21 +17,19 @@ public class PurchaseModuleObserver {
     @Inject
     private MonitoringService monitoringService;
 
-    public void acceptNotifyPaymentOk(@Observes NotifyPayment event) {
-        log.infof("Se realizo un pago exitoso: %s", event);
+    public void acceptNotifyPayment(@Observes NotifyPayment event) {
         Payment payment = new Payment(event.getRut_commerce(), event.getAmount(), event.getStatus());
 
-        monitoringService.notifyPaymentOk(payment);
+        if (event.getStatus() == 1) { // Pago OK
+            log.infof("Se realizo un pago exitoso: %s", event);
+            monitoringService.notifyPaymentOk(payment);
+        } else { // Pago FAIL
+            log.infof("Se realizo un pago fallido: %s", event);
+            monitoringService.notifyPaymentFail(payment);
+        }
     }
 
-    public void acceptNotifyPaymentFail(@Observes NotifyPayment event) {
-        log.infof("Se realizo un pago fallido: %s", event);
-        Payment payment = new Payment(event.getRut_commerce(), event.getAmount(), event.getStatus());
-
-        monitoringService.notifyPaymentFail(payment);
-    }
-
-    public void acceptNotifySalesReport(@Observes NotifyPayment event) {
+    public void acceptNotifySalesReport(@Observes NotifySalesReport event) {
         log.infof("Se realizo un reporte de ventas: %s", event);
         SalesReport salesReport = new SalesReport(event.getRut_commerce());
 

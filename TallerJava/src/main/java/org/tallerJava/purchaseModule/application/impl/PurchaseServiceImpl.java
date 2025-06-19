@@ -48,9 +48,6 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Transactional
     public void processPayment(PaymentDataDTO paymentData) {
         try {
-            // Notifico pago
-            //publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), -1);
-
             Purchase purchase = PaymentDataDTO.buildPurchase(paymentData);
             Card card = PaymentDataDTO.buildCard(paymentData.getCardData());
             long rut = paymentData.getCommerceRut();
@@ -65,11 +62,7 @@ public class PurchaseServiceImpl implements PurchaseService {
             purchaseRepository.create(purchase);
             commerce.addPurchase(purchase);
             commerce.addPurchaseAmount(purchase.getAmount(), purchase.getDate());
-            // Notifico pago OK
-            publisherEventPurchase.publishNotifyOkPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 1);
         } catch (Exception e) {
-            // Notifico pago ERROR
-            publisherEventPurchase.publishNotifyFailPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
             throw e;
         }
     }
@@ -146,13 +139,22 @@ public class PurchaseServiceImpl implements PurchaseService {
         int status = response.getStatus();
         String responseBody = response.readEntity(String.class);
 
-        if (status == 200) {
-            //Pago ok
-        } else if (status == 402) { // Fondos insuficientes
-            throw new PaymentException("Fondos insuficientes: " + responseBody);
-        } else {
-            throw new PaymentException("Error al procesar medio de pago (código " + status + "): " + responseBody);
+        switch (status) {
+            case 200:
+                // Notifico pago OK
+                publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 1);
+                break;
+            case 402:
+                // Notifico pago FAIL
+                publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
+                throw new PaymentException("Fondos insuficientes: " + responseBody);
+            default:
+                // Notifico pago FAIL
+                publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
+                throw new PaymentException("Error al procesar medio de pago (código " + status + "): " + responseBody);
         }
+
+
 
         response.close();
         client.close();

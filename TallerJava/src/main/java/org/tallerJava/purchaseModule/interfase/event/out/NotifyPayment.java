@@ -8,5 +8,5 @@ import lombok.Data;
 public class NotifyPayment {
     long rut_commerce;
     float amount;
-    int status; // 0 = ERROR | 1 = OK | -1 = NOTIFY_PAYMENT
+    int status; // 0 = ERROR | 1 = OK
 }

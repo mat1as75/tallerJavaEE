@@ -1,0 +1,12 @@
+apiVersion: 1
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    jsonData:
+      version: Flux
+      defaultBucket: TallerJava
+      organization: TallerJavaEquipo2
+    secureJsonData:
+      token: secret-key

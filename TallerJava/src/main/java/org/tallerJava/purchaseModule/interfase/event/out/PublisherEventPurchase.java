@@ -11,12 +11,6 @@ public class PublisherEventPurchase {
     private Event<NotifyPayment> notifyPaymentEvent;
 
     @Inject
-    private Event<NotifyPayment> notifyPaymentOkEvent;
-
-    @Inject
-    private Event<NotifyPayment> notifyPaymentFailEvent;
-
-    @Inject
     private Event<NotifySalesReport> notifySalesReportEvent;
 
 
@@ -28,26 +22,6 @@ public class PublisherEventPurchase {
         NotifyPayment event = buildNotifyPaymentEvent(rut_commerce, amount, status);
 
         notifyPaymentEvent.fire(event);
-    }
-
-    private NotifyPayment buildNotifyPaymentOkEvent(long rut_commerce, float amount, int status) {
-        return new NotifyPayment(rut_commerce, amount, status);
-    }
-
-    public void publishNotifyOkPayment(long rut_commerce, float amount, int status) {
-        NotifyPayment event = buildNotifyPaymentOkEvent(rut_commerce, amount, status);
-
-        notifyPaymentOkEvent.fire(event);
-    }
-
-    private NotifyPayment buildNotifyPaymentFailEvent(long rut_commerce, float amount, int status) {
-        return new NotifyPayment(rut_commerce, amount, status);
-    }
-
-    public void publishNotifyFailPayment(long rut_commerce, float amount, int status) {
-        NotifyPayment event = buildNotifyPaymentFailEvent(rut_commerce, amount, status);
-
-        notifyPaymentFailEvent.fire(event);
     }
 
     private NotifySalesReport buildNotifySalesReportEvent(long rut_commerce) {

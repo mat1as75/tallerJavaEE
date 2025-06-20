@@ -1,6 +1,6 @@
 package org.tallerJava.monitoringModule.application.impl;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import org.tallerJava.monitoringModule.application.MonitoringService;
 import org.tallerJava.monitoringModule.domain.Complaint;
@@ -9,7 +9,7 @@ import org.tallerJava.monitoringModule.domain.Payment;
 import org.tallerJava.monitoringModule.domain.SalesReport;
 import org.tallerJava.monitoringModule.infrastructure.MetricsRegister;
 
-@ApplicationScoped
+@RequestScoped
 public class MonitoringServiceImpl implements MonitoringService {
     @Inject
     private MetricsRegister metricsRegister;

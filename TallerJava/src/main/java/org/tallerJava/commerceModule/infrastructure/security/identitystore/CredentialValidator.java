@@ -25,6 +25,9 @@ public class CredentialValidator implements IdentityStore {
         CredentialValidationResult result = CredentialValidationResult.INVALID_RESULT;
 
         UsernamePasswordCredential credencial = (UsernamePasswordCredential)credential;
+        if (credencial.getCaller() == null || credencial.getCaller().isBlank()) {
+            throw new IllegalArgumentException("Caller esta vacio o es null.");
+        }
         long usr = Long.parseLong(credencial.getCaller());
         String pass = credencial.getPasswordAsString();
         Commerce userCommerce = findCommerce(usr);

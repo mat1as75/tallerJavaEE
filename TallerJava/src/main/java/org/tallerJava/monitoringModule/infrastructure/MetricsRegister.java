@@ -18,6 +18,7 @@ public class MetricsRegister {
     public static final String METRIC_COMPLAINT = "complaint";
 
     private InfluxConfig config;
+    private MeterRegistry meterRegistry;
 
     @PostConstruct
     public void init() {
@@ -30,25 +31,25 @@ public class MetricsRegister {
             public Duration step() { return Duration.ofSeconds(10); }
 
             @Override
-            public String db() { return "TallerJava"; }
-
-            @Override
             public String uri() { return "http://localhost:8086"; }
 
             @Override
-            public String userName() { return "root"; }
+            public String bucket() { return "TallerJava"; }
 
             @Override
-            public String password() { return "root"; }
+            public String org() { return "TallerJavaEquipo2"; }
+
+            @Override
+            public String token() { return "secret-key"; }
 
             @Override
             public boolean enabled() { return true; }
         };
+
+        meterRegistry = new InfluxMeterRegistry(config, Clock.SYSTEM);
     }
 
     public void counterIncrement(String counterName) {
-        MeterRegistry meterRegistry;
-        meterRegistry = new InfluxMeterRegistry(config, Clock.SYSTEM);
         meterRegistry.counter(counterName).increment();
     }
 }

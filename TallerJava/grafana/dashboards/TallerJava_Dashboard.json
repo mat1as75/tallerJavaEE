@@ -1,0 +1,90 @@
+{
+  "uid": "InfluxDB",
+  "title": "Dashboard Pasarela de Pagos (Flux)",
+  "timezone": "browser",
+  "editable": true,
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "10s",
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Pagos Confirmados",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"TallerJava\") |> range(start: -30m) |> filter(fn: (r) => r._measurement == \"payment_ok\" and r._field == \"value\")"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Pagos Rechazados",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"TallerJava\") |> range(start: -30m) |> filter(fn: (r) => r._measurement == \"payment_fail\" and r._field == \"value\")"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Reportes de Ventas",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"TallerJava\") |> range(start: -30m) |> filter(fn: (r) => r._measurement == \"sales_report\" and r._field == \"value\")"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Depósitos en Banco",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"TallerJava\") |> range(start: -30m) |> filter(fn: (r) => r._measurement == \"deposit\" and r._field == \"value\")"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Reclamos",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "refId": "E",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB"
+          },
+          "query": "from(bucket: \"TallerJava\") |> range(start: -30m) |> filter(fn: (r) => r._measurement == \"complaint\" and r._field == \"value\")"
+        }
+      ]
+    }
+  ]
+}

@@ -4,12 +4,12 @@ Este repositorio contiene el desarrollo de una **Pasarela de Pagos** modular, en
 
 ## 🛠️ Tecnologías
 
-- **Jakarta EE 10** (CDI, REST, JPA, Interceptors, Messaging, Security)
+- **Jakarta EE 10** (CDI, REST, JPA, Interceptors, Messaging, Security).
 - **Java SE 21**
-- **WildFly** como servidor de aplicaciones
-- **Docker** para contenedores [🔗 Ver documentación](/docs/docker.md)
-- **Grafana + InfluxDB** (observabilidad en futuras etapas)
-- **Bucket4j** para manejo de límites de tasa (rate limiting)
+- **WildFly** como servidor de aplicaciones.
+- **Docker** para contenedores. 
+- **Grafana + InfluxDB** para observabilidad. ([🔗 Ver documentación Docker + Grafana + InfluxDB](/docs/docker.md))
+- **Bucket4j** para manejo de límites de tasa (rate limiting).
 
 ---
 
@@ -41,6 +41,7 @@ Cada módulo implementa una funcionalidad específica del negocio y está diseñ
 - **Compras**: Procesamiento de pagos, generación de reportes.
 - **Transferencias**: Manejo de notificaciones y depósitos.
 - **Monitoreo**: Gestión de eventos relevantes del sistema.
+- **Autenticación**: Autenticar y autorizar los pagos.
 
 ![diagrama_p10_img1](https://github.com/user-attachments/assets/e0a576ba-9150-4eaf-8106-1190964acb2a)
 

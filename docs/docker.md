@@ -130,9 +130,7 @@ volumes:
   influxdb_data:
   grafana_data:
 ```
-
-![Docker Grafana](https://github.com/user-attachments/assets/019dab97-54be-4d85-bec4-89f880466b6f)
-![Docker InfluxDB](https://github.com/user-attachments/assets/531f6a88-f396-4db5-9666-d1b4d91108c9)
+![Diagrama Arquitectura Docker Compose](https://github.com/user-attachments/assets/8add2b84-fed1-4cc8-be0d-0e863e6cd976)
 
 ---
 

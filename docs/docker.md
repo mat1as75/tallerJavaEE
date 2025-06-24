@@ -53,7 +53,7 @@ docker run -d \
   philhawthorne/docker-influxdb-grafana:latest
 ```
 
-📸 *Agregar aquí una captura del contenedor corriendo en Docker Desktop.*
+![Docker Compose](https://github.com/user-attachments/assets/eeb94107-7b41-4cc1-a6b8-2abe6e58e16d)
 
 ---
 
@@ -82,7 +82,7 @@ Se creó, en un archivo JSON, un dashboard personalizado con los siguientes pane
 - 🏦 **Notificaciones de depósitos**: gráfico por hora.
 - 📢 **Reclamos realizados**: contador acumulativo.
 
-📸 *Agregar aquí capturas del nuevo dashboard con los paneles correspondientes.*
+![Dashboards-General](https://github.com/user-attachments/assets/e8659108-41a2-4f27-afe3-cdbdeb2dd7da)
 
 ---
 
@@ -131,7 +131,8 @@ volumes:
   grafana_data:
 ```
 
-📸 *Agregar aquí captura de ambos contenedores corriendo en Docker Compose.*
+![Docker Grafana](https://github.com/user-attachments/assets/019dab97-54be-4d85-bec4-89f880466b6f)
+![Docker InfluxDB](https://github.com/user-attachments/assets/531f6a88-f396-4db5-9666-d1b4d91108c9)
 
 ---
 
@@ -143,11 +144,14 @@ Esta iteración permitió comprender en profundidad el valor del monitoreo en ap
 
 ## 🖼️ Galería de imágenes
 
-> Reemplazar las siguientes rutas por tus capturas reales:
-
-- ![Dashboard Grafana](./docs/img/custom-dashboard.png)
-- ![Docker Compose](./docs/img/docker-compose-containers.png)
-- ![Docker Grafana](./docs/img/docker-grafana.png)
-- ![Docker InfluxDB](./docs/img/docker-influxdb.png)
+- ![Dashboards Grafana General](https://github.com/user-attachments/assets/6292077b-fef6-402c-8715-618bcc8a90b0)
+- ![Dashboard Pagos Confirmados](https://github.com/user-attachments/assets/184a8f40-4ab9-4ea1-9ce6-3b3e08b511e0)
+- ![Dashboard Pagos Rechazados](https://github.com/user-attachments/assets/a5486e50-320f-45da-b48e-a52cb5629e89)
+- ![Dashboard Reportes Ventas](https://github.com/user-attachments/assets/38b51b98-de50-44bb-94d2-6fe6c07007a3)
+- ![Dashboard Depósitos Banco](https://github.com/user-attachments/assets/2d236a38-ddfa-4f9a-a195-50e9c86d52dd)
+- ![Dashboard Reclamos](https://github.com/user-attachments/assets/3fe11d08-4c5d-4f6c-a8c1-f2bd0fbcd3eb)
+- ![Docker-Compose](https://github.com/user-attachments/assets/2575e946-5507-49c5-ae8f-a4295868098e)
+- ![Container Grafana](https://github.com/user-attachments/assets/d1e85928-293c-41cf-ab33-2f74e56c1c12)
+- ![Container InfluxDB](https://github.com/user-attachments/assets/144a3d41-0f21-4a01-adc2-b509b8a8fd17)
 
 ---

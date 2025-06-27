@@ -44,7 +44,7 @@ Durante las pruebas se detectaron los siguientes errores:
 /subsystem=messaging-activemq/server=default/jms-queue=ComplaintQueue:add(entries=["java:/jms/queue/ComplaintQueue","java:jboss/exported/jms/queue/ComplaintQueue"])
 ```
 
-- El consumidor está configurado con `maxSession=1` para su testo, en entornos de producción se debería ajustar el parámetro.
+- El consumidor está configurado con `maxSession=1` para su test, en entornos de producción se debería ajustar el parámetro.
 
 
 # Análisis de Carga y Procesamiento Asíncrono

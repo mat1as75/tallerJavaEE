@@ -17,10 +17,10 @@ La queue `ComplaintQueue` es utilizada para desacoplar el procesamiento de queja
 - **Persistencia:** El repositorio `CommerceRepositoryImpl` se encarga de guardar la queja y su calificación en la base de datos.
 
 ## Pruebas de Estrés
-Se realizaron pruebas de estrés enviando un alto volumen de requests a la aplicación, con el objetivo de evaluar el comportamiento de la queue y del sistema bajo carga.
+Se realizaron pruebas de estrés enviando un alto volumen de requests (800 requests/segundo) durante  15 minutos a la aplicación , con el objetivo de evaluar el comportamiento de la queue y del sistema bajo carga.
 
 ### Resultados Observados
-Durante las pruebas se detectaron los siguientes errores en los logs:
+Durante las pruebas se detectaron los siguientes errores:
 
 - `UT005090` y `UT005023`: Errores de Undertow relacionados con el manejo de requests HTTP.  
 - `org.hibernate.exception.GenericJDBCException: Unable to acquire JDBC Connection [jakarta.resource.ResourceException: IJ000453: Unable to get managed connection for java:jboss/MariaDB]`: Indica que el pool de conexiones a la base de datos se agotó, probablemente por exceso de carga o falta de recursos.
@@ -46,9 +46,39 @@ Durante las pruebas se detectaron los siguientes errores en los logs:
 
 - El consumidor está configurado con `maxSession=1` para su testo, en entornos de producción se debería ajustar el parámetro.
 
-## Gráficas
-Se adjuntan gráficas comparando la cantidad de requests enviadas, el trabajo de la queue y el uso del buffer en el servidor.
 
+# Análisis de Carga y Procesamiento Asíncrono
+
+Se adjuntan gráficas que comparan la cantidad de **requests** enviadas, el comportamiento de la **queue** (cola de procesamiento) y el uso del **buffer** en el servidor.
+
+Durante la prueba, se enviaron **100 requests por segundo** utilizando **JMeter** hacia el siguiente endpoint:
+
+
+> ⚠️ La primera gráfica representa únicamente las **solicitudes enviadas** desde el cliente. No refleja el procesamiento interno en el servidor, lo que motivó la implementación de logs detallados en el backend para entender mejor el comportamiento real.
+
+---
+
+## 🟦 Solicitudes Enviadas (JMeter)
+
+![Histograma de Time](https://github.com/user-attachments/assets/fb3b745d-f943-40cf-b46c-b49299de8628)
+
+---
+
+## 🟩 Eventos Registrados en el Servidor
+
+De forma **sincrónica**, se observa el comportamiento del servidor, en donde se registran los eventos internos con timestamps equivalentes. Donde se observa que a pesar de que la carga desde la request finaliza a los 30 segundos la queue sigue procensado mensajes incluso 1 minuto más tarde de haber recibido la carga.
+
+![Recuento de Hora](https://github.com/user-attachments/assets/c89fd400-8a71-4cc7-9207-b2c681e355ca)
+
+---
+
+## 🟨 Distribución del Tiempo de Respuesta
+
+Gracias al uso de una **queue asíncrona**, el servidor es capaz de mantener una **respuesta estable** incluso ante una carga constante. Esta arquitectura desacopla la recepción de las solicitudes del procesamiento interno, evitando cuellos de botella y saturaciones inmediatas.
+
+![Response time distribution](https://github.com/user-attachments/assets/fe67662e-31cc-4f4b-9f0e-dfc1bb60fff7)
+
+Como puede verse, los tiempos de respuesta del servidor se mantienen dentro de márgenes aceptables, lo que evidencia que el uso de una **queue JMS** actúa como amortiguador entre el volumen de entrada y la capacidad de procesamiento del backend.
 
 
 ---

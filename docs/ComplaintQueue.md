@@ -9,7 +9,7 @@ La queue `ComplaintQueue` es utilizada para desacoplar el procesamiento de queja
 ### Flujo de trabajo
 1. El endpoint REST `/commerce/{rut}/makeComplaint` recibe la queja y llama a `CommerceService.createComplaint()`.
 2. `CommerceServiceImpl` utiliza `ComplaintMessageProducer` para enviar el mensaje a la queue JMS.
-3. `ComplaintMessageConsumer` consume el mensaje, realiza el análisis de sentimiento (simulado) y persiste la queja en la base de datos usando `CommerceRepository`.
+3. `ComplaintMessageConsumer` consume el mensaje, realiza el análisis este análisis lo hará un LLM para determinar su "qualification" y persiste la queja en la base de datos usando `CommerceRepository`.
 
 ## Implementación
 - **Productor:** `ComplaintMessageProducer` utiliza `JMSContext` y la queue `java:/jms/queue/ComplaintQueue` para enviar mensajes de tipo `ComplaintMessage`.

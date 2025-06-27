@@ -30,9 +30,9 @@ public class ComplaintMessageConsumer implements MessageListener {
             if (message instanceof ObjectMessage objectMessage) {
                 ComplaintMessage complaintMessage = (ComplaintMessage) objectMessage.getObject();
                 // Acá deberia de ir la consulta al endpoint del LLM
-                String sentiment = "POSITIVO"; //LLM RESPONSE. Uppercase sensitive
+                String qualification = "POSITIVO"; //LLM RESPONSE. Uppercase sensitive
 
-                commerceRepository.createComplaint(complaintMessage.getRutCommerce(), complaintMessage.getMessage(), sentiment);
+                commerceRepository.createComplaint(complaintMessage.getRutCommerce(), complaintMessage.getMessage(), qualification);
             }
         } catch (JMSException e) {
             throw new RuntimeException("Error al procesar JMS", e);

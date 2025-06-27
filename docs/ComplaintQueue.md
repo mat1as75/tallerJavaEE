@@ -51,7 +51,7 @@ Durante las pruebas se detectaron los siguientes errores:
 
 Se adjuntan gráficas que comparan la cantidad de **requests** enviadas, el comportamiento de la **queue** (cola de procesamiento) y el uso del **buffer** en el servidor.
 
-Durante la prueba, se enviaron **100 requests por segundo** utilizando **JMeter** hacia el siguiente endpoint:
+Durante la prueba, se enviaron **100 requests por segundo** utilizando **JMeter** hacia el endpoint que recibe las quejas: `/commerce/{rut}/makeComplaint`
 
 
 > ⚠️ La primera gráfica representa únicamente las **solicitudes enviadas** desde el cliente. No refleja el procesamiento interno en el servidor, lo que motivó la implementación de logs detallados en el backend para entender mejor el comportamiento real.

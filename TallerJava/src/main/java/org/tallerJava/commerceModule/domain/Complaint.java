@@ -14,12 +14,23 @@ public class Complaint {
     int id;
     String message;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "qualification")
+    private Qualification qualification;
+
+
     public Complaint() {}
 
     public Complaint(String message) { this.message = message; }
 
-    public Complaint(int id, String message) {
+    public Complaint(int id, String message) { //Verificar si se utiliza esto
         this.id = id;
         this.message = message;
     }
+
+    public Complaint(String message, Qualification qualification) {
+        this.message = message;
+        this.qualification = qualification;
+    }
+
 }

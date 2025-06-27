@@ -147,7 +147,6 @@ public class CommerceAPI {
         Commerce commerce = commerceService.getByRut(rut);
 
         if (commerceService.createComplaint(rut, complaintDTO.getMessage())) {
-            publisherEventCommerce.makeCommerceComplaint(rut, complaintDTO.getMessage());
             return Response.ok(commerce).build();
         } else {
             log.error("Comercio no encontrado con Rut: " + rut);

@@ -24,6 +24,9 @@ public class CommerceServiceImpl implements CommerceService {
     @Inject
     private PublisherEventCommerce publisherEventCommerce;
 
+    @Inject
+    private org.tallerJava.commerceModule.infrastructure.messaging.ComplaintMessageProducer complaintMessageProducer;
+
     @Override
     public Commerce getByRut(long rut) {
         return commerceRepository.findByRut(rut);
@@ -94,8 +97,17 @@ public class CommerceServiceImpl implements CommerceService {
 
     @Override
     public boolean createComplaint(long rut_commerce, String message) {
-        notifyMakeComplaint(rut_commerce, message);
-        return commerceRepository.createComplaint(rut_commerce, message);
+        try {
+            notifyMakeComplaint(rut_commerce, message);
+
+            complaintMessageProducer.sendComplaintMessage(rut_commerce, message);
+
+            log.infof("Queja del comercio %d enviada correctamente", rut_commerce);
+            return true;
+        } catch (Exception e) {
+            log.errorf("Error al crear queja para comercio %d: %s", rut_commerce, e.getMessage());
+            return false;
+        }
     }
 
     private void notifyMakeComplaint(long rut_commerce, String message) {

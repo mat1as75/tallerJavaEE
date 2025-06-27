@@ -5,10 +5,7 @@ import jakarta.inject.Inject;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.jboss.logging.Logger;
-import org.tallerJava.commerceModule.domain.Commerce;
-import org.tallerJava.commerceModule.domain.CommercialBankAccount;
-import org.tallerJava.commerceModule.domain.Complaint;
-import org.tallerJava.commerceModule.domain.Pos;
+import org.tallerJava.commerceModule.domain.*;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
 import org.tallerJava.commerceModule.infrastructure.security.identitystore.CredentialValidator;
 
@@ -156,19 +153,18 @@ public class CommerceRepositoryImpl implements CommerceRepository {
     }
 
     @Override
-    public boolean createComplaint(long rut_commerce, String message) {
+    public void createComplaint(long rut_commerce, String message, String qualification) {
         Commerce commerce = this.findByRut(rut_commerce);
-        if (commerce == null) return false;
-        Complaint complaint = new Complaint(message);
+        if (commerce == null) return;
+        Qualification qual = Qualification.valueOf(qualification);
+        Complaint complaint = new Complaint(message,qual);
 
         try {
             em.persist(complaint);
             commerce.getListComplaints().add(complaint);
             em.merge(commerce);
-            return true;
         } catch (PersistenceException e) {
-            System.out.println("Fallo al crear el reclamo en CommerceRepositoryImpl.createComplaint()");
-            return false;
+            throw new RuntimeException("Error al crear complaint", e);
         }
     }
 

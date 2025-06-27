@@ -16,7 +16,7 @@ public interface CommerceRepository {
     public boolean updatePassword(long rut, String newPass);
     public boolean delete(long rut);
 
-    public boolean createComplaint(long rut_commerce, String message);
+    public void createComplaint(long rut_commerce, String message, String qualification);
     public boolean createPos(long rut_commerce, Pos pos);
     public int changePosStatus(long rut_commerce, Pos pos, boolean status);
 

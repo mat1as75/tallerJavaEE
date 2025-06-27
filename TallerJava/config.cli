@@ -3,6 +3,9 @@
 #No queremos tener que realizar estos pasos a mano cada vez que provisionamos el servidor,
 #por eso lo hacemos desde aqui de forma automática
 connect
+    # crear cola jms
+    /subsystem=messaging-activemq/server=default/jms-queue=ComplaintQueue:add(entries=["java:/jms/queue/ComplaintQueue","java:jboss/exported/jms/queue/ComplaintQueue"])
+
     #https://www.mastertheboss.com/jbossas/jboss-datasource/how-to-install-a-jdbc-driver-on-wildfly/#google_vignette
     #1ero se agrega un modulo
     try

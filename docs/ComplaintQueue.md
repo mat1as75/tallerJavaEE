@@ -66,7 +66,7 @@ Durante la prueba, se enviaron **100 requests por segundo** utilizando **JMeter*
 
 ## 🟩 Eventos Registrados en el Servidor
 
-De forma **sincrónica**, se observa el comportamiento del servidor, en donde se registran los eventos internos con timestamps equivalentes. Donde se observa que a pesar de que la carga desde la request finaliza a los 30 segundos la queue sigue procensado mensajes incluso 1 minuto más tarde de haber recibido la carga.
+De forma **sincrónica**, se observa el comportamiento del servidor, en donde se registran los eventos internos con timestamps equivalentes. Donde se observa que a pesar de que la carga desde la request finaliza a los 30 segundos la queue sigue procesando mensajes incluso 1 minuto más tarde de haber recibido la carga.
 
 ![Recuento de Hora](https://github.com/user-attachments/assets/c89fd400-8a71-4cc7-9207-b2c681e355ca)
 

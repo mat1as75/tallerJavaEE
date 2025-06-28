@@ -150,6 +150,20 @@
             <artifactId>jaxws-rt</artifactId>
             <version>3.0.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.jms</groupId>
+            <artifactId>jakarta.jms-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.ejb</groupId>
+            <artifactId>jakarta.ejb-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -181,13 +195,13 @@
                         <command>/subsystem=undertow/application-security-domain=other:write-attribute(name=integrated-jaspi,value=false)</command>
                         <command>reload</command>
                     </commands>
-<!--                    <add-user>-->
-<!--                        <users>-->
-<!--                            <user>-->
-<!--                                <username>root</username>-->
-<!--                                <password>1234</password>-->
-<!--                                <application-user>false</application-user>-->
-<!--                            </user>-->
+                    <add-user>
+                        <users>
+                            <user>
+                                <username>root</username>
+                                <password>1234</password>
+                                <application-user>false</application-user>
+                            </user>
 
 <!--                            &lt;!&ndash; Preloaded Commerce Users in DB &ndash;&gt;-->
 <!--                            <user>-->
@@ -214,8 +228,8 @@
 <!--                                </groups>-->
 <!--                                <application-user>true</application-user>-->
 <!--                            </user>-->
-<!--                        </users>-->
-<!--                    </add-user>-->
+                        </users>
+                    </add-user>
                     <scripts>
                         <!-- ver archivo config.cli que está en ./ -->
                         <script>config.cli</script>

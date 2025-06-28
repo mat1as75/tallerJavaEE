@@ -69,11 +69,11 @@ public class PublisherEventCommerce {
     }
 
     public void makeCommerceComplaint(long rut_commerce, String message) {
+        // Este método solo publica el evento para observadores como el módulo de monitoreo
         CommerceMakeComplaint event = new CommerceMakeComplaint(rut_commerce, message);
-
         makeComplaintEvent.fire(event);
     }
-
+    
     public void publishNewPos(long rut_commerce, int id_pos, boolean status_pos) {
         CommercePos newPos = new CommercePos(id_pos, status_pos);
         CommerceNewPos event = new CommerceNewPos(rut_commerce, newPos.getId(), newPos.isStatus());

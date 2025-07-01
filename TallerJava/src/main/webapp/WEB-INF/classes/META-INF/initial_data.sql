@@ -33,9 +33,9 @@ INSERT INTO commerce_CommercePos (COMMERCE_RUT, POS_ID) VALUES (456, 2);
 INSERT INTO commerce_CommercePos (COMMERCE_RUT, POS_ID) VALUES (789, 3);
 
 -- Complaint
-INSERT INTO commerce_Complaint (message) VALUES ("Error en el cobro de varias transacciones hoy.");
-INSERT INTO commerce_Complaint (message) VALUES ("El sistema estuvo caído por más de 1 hora.");
-INSERT INTO commerce_Complaint (message) VALUES ("Stock desactualizado en la plataforma de ventas.");
+INSERT INTO commerce_Complaint (message, qualification) VALUES ("Error en el cobro de varias transacciones hoy.", "NEGATIVO");
+INSERT INTO commerce_Complaint (message, qualification) VALUES ("El sistema estuvo caído por más de 1 hora.", "NEGATIVO");
+INSERT INTO commerce_Complaint (message, qualification) VALUES ("Stock desactualizado en la plataforma de ventas.", "NEUTRO");
 
 -- CommerceComplaint
 INSERT INTO commerce_CommerceComplaint (COMMERCE_RUT, COMPLAINT_ID) VALUES (123, 1);

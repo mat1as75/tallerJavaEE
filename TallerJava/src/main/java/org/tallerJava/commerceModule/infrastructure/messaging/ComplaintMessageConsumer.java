@@ -8,8 +8,10 @@ import jakarta.jms.Message;
 import jakarta.jms.MessageListener;
 import jakarta.jms.ObjectMessage;
 import org.jboss.logging.Logger;
+import java.util.Locale;
 import org.tallerJava.commerceModule.domain.dto.ComplaintMessage;
 import org.tallerJava.commerceModule.domain.repo.CommerceRepository;
+import org.tallerJava.commerceModule.infrastructure.llm.LLMClient;
 
 @MessageDriven(activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "java:/jms/queue/ComplaintQueue"),
@@ -29,9 +31,14 @@ public class ComplaintMessageConsumer implements MessageListener {
         try {
             if (message instanceof ObjectMessage objectMessage) {
                 ComplaintMessage complaintMessage = (ComplaintMessage) objectMessage.getObject();
-                // Acá deberia de ir la consulta al endpoint del LLM
-                String qualification = "POSITIVO"; //LLM RESPONSE. Uppercase sensitive
-
+                String qualification;
+                try {
+                    qualification = LLMClient.clasificarReclamo(complaintMessage.getMessage()).toUpperCase(Locale.ROOT);
+                    System.out.println("R: " + qualification);
+                } catch (Exception e) {
+                    log.error("Error al clasificar con LLM", e);
+                    qualification = "ERROR";
+                }
                 commerceRepository.createComplaint(complaintMessage.getRutCommerce(), complaintMessage.getMessage(), qualification);
             }
         } catch (JMSException e) {

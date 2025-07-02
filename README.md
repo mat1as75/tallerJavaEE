@@ -51,9 +51,9 @@ Cada módulo implementa una funcionalidad específica del negocio y está diseñ
 - Procesar pagos desde POS
 - Consultar reportes diarios y por período
 - Gestionar depósitos y comisiones
-- Soportar reclamos de comercios
+- Soportar reclamos de comercios + [🔗Integración con LLM](/docs/llm.md)
 
-## 🔒 Requerimientos No Funcionales
+## 🔒 Requerimientos No Funcionales 
 
 - Reportes asincrónicos para evitar sobrecarga
 - Almacenamiento eficiente de montos vendidos

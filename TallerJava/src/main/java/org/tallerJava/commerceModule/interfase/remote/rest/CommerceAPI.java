@@ -157,7 +157,7 @@ public class CommerceAPI {
     @PATCH
     @Path("/{rut}/changePosStatus")
     @Transactional
-    @RolesAllowed("admin")
+    @RolesAllowed("user")
     public Response changePosStatus(@PathParam("rut") long rut, PosDTO posDTO) {
         log.infof("Cambiando Estado de Pos con Rut: %d", rut);
         Commerce commerce = commerceService.getByRut(rut);

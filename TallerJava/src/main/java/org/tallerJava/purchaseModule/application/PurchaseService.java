@@ -22,4 +22,8 @@ public interface PurchaseService {
     public int changePosStatus(PurchasePos pos);
 
     public AuthStatus isCommerceAuthorized(long commerce_rut, String password);
+
+    public void notifyPaymentError(PaymentDataDTO paymentData);
+
+    public void notifyPaymentSuccess(PaymentDataDTO paymentData);
 }

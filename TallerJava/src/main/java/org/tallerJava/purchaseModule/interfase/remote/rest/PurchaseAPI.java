@@ -32,11 +32,13 @@ public class PurchaseAPI {
         AuthStatus authStatus = purchaseService.isCommerceAuthorized(paymentData.getCommerceRut(), paymentData.getPassword());
         System.out.println("STATUS PROCESS PAYMENT: %s" + authStatus);
         if (authStatus.equals(AuthStatus.NOT_AUTH)) {
+            purchaseService.notifyPaymentError(paymentData);
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("No se pudo autenticar el comercio")
                     .build();
         }
         if (authStatus.equals(AuthStatus.NOT_EXISTS)) {
+            purchaseService.notifyPaymentError(paymentData);
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("El comercio no existe")
                     .build();

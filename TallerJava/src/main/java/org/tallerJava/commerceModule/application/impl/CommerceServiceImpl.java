@@ -85,7 +85,7 @@ public class CommerceServiceImpl implements CommerceService {
         String passwordHash = HashFunctionUtil.convertToHas(newPass);
 
         notifyUpdatePasswordCommerce(rut, passwordHash);
-        return commerceRepository.updatePassword(rut, newPass);
+        return commerceRepository.updatePassword(rut, passwordHash);
     }
 
     private void notifyUpdatePasswordCommerce(long rut_commerce, String newPass) {

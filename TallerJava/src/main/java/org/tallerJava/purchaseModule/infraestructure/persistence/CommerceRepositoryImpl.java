@@ -1,10 +1,7 @@
 package org.tallerJava.purchaseModule.infraestructure.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
+import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import org.tallerJava.purchaseModule.domain.PurchaseCommerce;
 import org.tallerJava.purchaseModule.domain.repo.CommerceRepository;
@@ -25,6 +22,7 @@ public class CommerceRepositoryImpl implements CommerceRepository {
                             "SELECT c FROM purchase_Commerce c WHERE c.rut = :rut",
                             PurchaseCommerce.class
                     )
+                    .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                     .setParameter("rut", rut)
                     .getResultList();
 

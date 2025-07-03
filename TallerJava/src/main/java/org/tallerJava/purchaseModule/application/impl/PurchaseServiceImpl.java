@@ -54,10 +54,9 @@ public class PurchaseServiceImpl implements PurchaseService {
             int posId = paymentData.getPosId();
             PurchaseCommerce commerce = CommerceRepository.findByRut(rut);
             PurchasePos pos = PosRepository.findById(posId);
-            if (!pos.isStatus()) {
-                throw new IllegalStateException("El POS está inactivo o no disponible");
-            }
-            PaymentCommit(paymentData);
+
+            PaymentCommit(paymentData, pos);
+
             purchase.setPos(pos);
             purchaseRepository.create(purchase);
             commerce.addPurchase(purchase);
@@ -127,7 +126,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         return PosRepository.changePosStatus(pos);
     }
 
-    private void PaymentCommit(PaymentDataDTO paymentData){
+    private void PaymentCommit(PaymentDataDTO paymentData, PurchasePos pos){
         Client client = ClientBuilder.newClient();
         String url = "http://localhost:8080/PaymentMethod-1.0-SNAPSHOT/api";
 
@@ -139,22 +138,25 @@ public class PurchaseServiceImpl implements PurchaseService {
         int status = response.getStatus();
         String responseBody = response.readEntity(String.class);
 
+        if (!pos.isStatus()) {
+            this.notifyPaymentError(paymentData);
+            throw new IllegalStateException("El POS está inactivo o no disponible");
+        }
+
         switch (status) {
             case 200:
                 // Notifico pago OK
-                publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 1);
+                this.notifyPaymentSuccess(paymentData);
                 break;
             case 402:
                 // Notifico pago FAIL
-                publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
+                this.notifyPaymentError(paymentData);
                 throw new PaymentException("Fondos insuficientes: " + responseBody);
             default:
                 // Notifico pago FAIL
-                publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
+                this.notifyPaymentError(paymentData);
                 throw new PaymentException("Error al procesar medio de pago (código " + status + "): " + responseBody);
         }
-
-
 
         response.close();
         client.close();
@@ -163,6 +165,16 @@ public class PurchaseServiceImpl implements PurchaseService {
     @Override
     public AuthStatus isCommerceAuthorized(long commerce_rut, String password) {
         return authService.authenticate(commerce_rut, password).getStatus();
+    }
+
+    @Override
+    public void notifyPaymentError(PaymentDataDTO paymentData) {
+        publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 0);
+    }
+
+    @Override
+    public void notifyPaymentSuccess(PaymentDataDTO paymentData) {
+        publisherEventPurchase.publishNotifyPayment(paymentData.getCommerceRut(), paymentData.getAmount(), 1);
     }
 
 }

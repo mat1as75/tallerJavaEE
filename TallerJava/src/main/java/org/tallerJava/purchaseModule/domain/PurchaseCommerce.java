@@ -2,6 +2,7 @@ package org.tallerJava.purchaseModule.domain;
 
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +34,7 @@ public class PurchaseCommerce {
     public PurchaseCommerce() {
     }
 
+    @Transactional
     public void addPurchaseAmount(double amount,Date purchaseDate) {
         if (isDifferentDay(purchaseDate, lastPurchase)) {
             this.totalSalesAmount = 0d;
@@ -41,6 +43,7 @@ public class PurchaseCommerce {
             this.totalSalesAmount += amount;
         }
     }
+
     public void resetTotalAmountIfDifferentDay(){
         if (isDifferentDay(lastPurchase, new Date())) {
             this.totalSalesAmount = 0d;
@@ -58,6 +61,7 @@ public class PurchaseCommerce {
         purchase.setCommerce(null);
     }
 
+    //@Transactional
     private boolean isDifferentDay(Date date1, Date date2) {
         if (date1 == null || date2 == null) {
             return true;
